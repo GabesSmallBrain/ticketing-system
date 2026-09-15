@@ -18,6 +18,7 @@ test('supporter shop completes a two-ticket purchase and the shared scanner admi
   await page.getByRole('link', { name: 'NADALJUJ' }).first().click();
   await expect(page.getByRole('heading', { name: 'VAŠE VSTOPNICE' })).toBeVisible();
   await page.getByRole('link', { name: 'NADALJUJ NA PLAČILO' }).click();
+  await expect(page).toHaveURL('/checkout');
   await page.getByRole('textbox', { name: 'Ime', exact: true }).fill('Ana');
   await page.getByRole('textbox', { name: 'Priimek', exact: true }).fill('Navijac');
   await page.getByRole('textbox', { name: 'E-pošta', exact: true }).fill('ana@example.test');
@@ -39,6 +40,29 @@ test('supporter shop completes a two-ticket purchase and the shared scanner admi
   await expect(page.getByText('VSTOPNICA 2 OD 2')).toBeVisible();
   const scanned = await page.evaluate(async (tickets) => Promise.all(tickets.map((ticket: { credential: string }) => fetch('/api/scans', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ eventId: 'evt-mura', gate: 'Vhod 1', credential: ticket.credential }) }).then((response) => response.json()))), order.tickets);
   expect(scanned.map((item: { result: string }) => item.result)).toEqual(['accepted', 'accepted']);
+});
+
+test('public header exposes the staff login without exposing staff controls', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.getByRole('link', { name: 'PRIJAVA ZA OSEBJE' }).first()).toHaveAttribute('href', '/prijava-za-osebje');
+  await page.getByRole('link', { name: 'PRIJAVA ZA OSEBJE' }).first().click();
+  await expect(page).toHaveURL('/prijava-za-osebje');
+  await expect(page.getByRole('heading', { name: 'KDO STE?' })).toBeVisible();
+  await expect(page.getByRole('button', { name: /ADMINISTRATOR/ })).toBeVisible();
+});
+
+test('public shop remains within the viewport across supported widths', async ({ page }) => {
+  for (const viewport of [{ width: 375, height: 812 }, { width: 390, height: 844 }, { width: 430, height: 932 }, { width: 768, height: 1024 }, { width: 1366, height: 768 }, { width: 1440, height: 900 }]) {
+    await page.setViewportSize(viewport);
+    await page.goto('/');
+    await expect(page.locator('.shop-header')).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  }
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto('/vstopnice/beltinci-mura');
+  await page.getByRole('button', { name: '+' }).first().click();
+  await expect(page.locator('.mobile-cart')).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });
 
 test('supporter ticket selection respects closed sales state', async ({ page }) => {

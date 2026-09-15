@@ -108,6 +108,14 @@ test('role switch replaces the old cookie session', async ({ page }) => {
   await expect(page.getByText('Nekaj ni uspelo')).toBeVisible();
 });
 
+test('staff logout invalidates the server session and returns to the public shop', async ({ page }) => {
+  await login(page, /ADMINISTRATOR/);
+  await page.getByRole('button', { name: 'ODJAVA' }).click();
+  await page.waitForURL('/');
+  await expect(page.getByText('NASLEDNJA DOMAČA TEKMA')).toBeVisible();
+  expect(await page.evaluate(() => fetch('/api/admin/dashboard').then((response) => response.status))).toBe(403);
+});
+
 test('protected admin API rejects a fresh context', async ({ page }) => {
   await page.goto('/');
   expect(await page.evaluate(() => fetch('/api/admin/dashboard').then((response) => response.status))).toBe(403);

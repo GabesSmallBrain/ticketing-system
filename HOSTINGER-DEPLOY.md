@@ -2,13 +2,13 @@
 
 This archive is a Node.js application, not a static site.
 
-In Hostinger hPanel, create a **Node.js Web App** and upload this archive or connect its contents to a Git repository.
+In Hostinger hPanel, create a **Node.js Web App** (not a static website/Website Builder entry) and upload this archive or connect its contents to a Git repository. Attach the intended hostname to that Node.js app; a static Hostinger site cannot serve this application's API or direct-route fallback.
 
 Use:
 
 ```text
 Node.js: 22.x
-Build command: npm install
+Build command: npm install --include=dev
 Start command: npm run start
 NODE_ENV: production
 ```

@@ -6,7 +6,7 @@ import { audit, CLUB, credential, issueTickets, redeem, reference, type Channel,
 import { mutate, readDb, reset } from './db.js';
 
 const port = Number(process.env.PORT ?? 3000); const staticRoot = join(process.cwd(), 'src', 'web');
-const staffRoute = (path: string) => path === '/demo-login' || path === '/scanner' || path === '/admin' || path.startsWith('/admin/');
+const staffRoute = (path: string) => path === '/demo-login' || path === '/prijava-za-osebje' || path === '/scanner' || path === '/admin' || path.startsWith('/admin/');
 const json = (res: ServerResponse, code: number, body: unknown) => { res.writeHead(code, { 'content-type': 'application/json; charset=utf-8' }); res.end(JSON.stringify(body)); };
 const body = async (req: IncomingMessage): Promise<Record<string, unknown>> => new Promise((resolve, reject) => { let data = ''; req.on('data', (x: Buffer) => { data += x; if (data.length > 100_000) reject(new Error('Prevelika zahteva')); }); req.on('end', () => { try { resolve(data ? JSON.parse(data) as Record<string, unknown> : {}); } catch { reject(new Error('Neveljavni podatki')); } }); });
 const sessions = new Map<string, { role: Role; clubId: string; expiresAt: number }>();
@@ -22,6 +22,7 @@ const orderView = (order: Order) => { const { accessToken: _accessToken, payment
 async function api(req: IncomingMessage, res: ServerResponse, path: string) {
   const method = req.method ?? 'GET';
   if (method === 'POST' && path === '/api/demo-login') { const data = await body(req); const selected = input(data.role); if (!selected || !['club_admin', 'box_office', 'gate_staff'].includes(selected)) return json(res, 400, { error: 'Neveljavna demo vloga.' }); const token = credential(); const expiresAt = Date.now() + 8 * 60 * 60 * 1000; sessions.set(token, { role: selected as Role, clubId: CLUB, expiresAt }); const secure = process.env.NODE_ENV === 'production' ? '; Secure' : ''; res.setHeader('Set-Cookie', `${sessionCookie}=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=28800${secure}`); return json(res, 200, { role: selected, clubId: CLUB, expiresAt }); }
+  if (method === 'POST' && path === '/api/logout') { const token = cookieValue(req, sessionCookie); if (token) sessions.delete(token); const secure = process.env.NODE_ENV === 'production' ? '; Secure' : ''; res.setHeader('Set-Cookie', `${sessionCookie}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0${secure}`); return json(res, 200, { ok: true }); }
   if (method === 'GET' && path === '/api/session') { const actor = principal(req); return json(res, 200, actor ? { authenticated: true, role: actor.role, clubId: actor.clubId } : { authenticated: false }); }
   if (method === 'GET' && path === '/api/demo/session' && process.env.NODE_ENV !== 'production') { const actor = principal(req); return json(res, 200, actor ? { authenticated: true, role: actor.role, clubId: actor.clubId } : { authenticated: false }); }
   if (method === 'GET' && path === '/api/events') { const db = await readDb(); return json(res, 200, { events: db.events.filter((event) => event.clubId === CLUB), ticketTypes: db.ticketTypes }); }
