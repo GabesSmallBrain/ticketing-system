@@ -93,7 +93,7 @@ test('gate staff admits a box-office ticket once and rejects the duplicate', asy
   await input.fill(issued.tickets[0].credential);
   await page.getByRole('button', { name: 'PREVERI' }).click();
   await expect(page.getByRole('heading', { name: 'VELJAVNA VSTOPNICA' })).toBeVisible();
-  await page.getByRole('button', { name: 'NADALJUJ SKENIRANJE' }).click();
+  await page.getByRole('button', { name: 'POTRDI' }).click();
   await input.fill(issued.tickets[0].credential);
   await page.getByRole('button', { name: 'PREVERI' }).click();
   await expect(page.getByRole('heading', { name: 'VSTOPNICA JE ŽE UPORABLJENA' })).toBeVisible();
