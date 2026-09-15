@@ -5,5 +5,5 @@ export default defineConfig({
   timeout: 30_000,
   workers: 1,
   use: { baseURL: 'http://127.0.0.1:3000', headless: true },
-  webServer: { command: 'npm run start', url: 'http://127.0.0.1:3000', reuseExistingServer: true }
+  webServer: { command: 'npm run build && npm run start', url: 'http://127.0.0.1:3000', reuseExistingServer: true }
 });

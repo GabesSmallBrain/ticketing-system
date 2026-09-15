@@ -10,6 +10,7 @@ Use:
 Node.js: 22.x
 Build command: npm install --include=dev
 Start command: npm run start
+Entry file: dist/server.js
 NODE_ENV: production
 ```
 
