@@ -83,8 +83,12 @@ test('a decoded camera frame sends one admission request while validation is in 
   await openScanner(page);
   await expect(page.getByRole('heading', { name: 'VELJAVNA VSTOPNICA' })).toBeVisible();
   expect(validations).toBe(1);
+  await page.getByRole('button', { name: 'NADALJUJ SKENIRANJE' }).click();
+  await page.waitForTimeout(1_000);
+  expect(validations).toBe(1);
   await expect(page.getByRole('heading', { name: 'VSTOPNICA JE ŽE UPORABLJENA' })).toBeVisible({ timeout: 6_000 });
   expect(validations).toBe(2);
+  await page.getByRole('button', { name: 'NADALJUJ SKENIRANJE' }).click();
   await page.getByRole('button', { name: 'SPREMENI VHOD' }).click();
   expect(await page.evaluate(() => window.__ndbCameraStops)).toBe(1);
 });

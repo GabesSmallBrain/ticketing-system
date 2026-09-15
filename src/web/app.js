@@ -76,34 +76,30 @@ async function cameraScanner() {
     const manual = node('form', { class: 'scan-entry manual-entry', hidden: '' }, node('label', {}, 'KODA VSTOPNICE', manualCode), button('PREVERI', 'primary large'));
     const manualToggle = button('ROČNI VNOS KODE', 'muted', () => { manual.hidden = !manual.hidden; if (!manual.hidden) manualCode.focus(); });
     const cameraButton = button('OMOGOČI KAMERO', 'primary large', () => startCamera());
-    const showResult = (result) => {
+    let resultModal = null;
+    const pauseDecoding = () => { if (cameraFrame) cancelAnimationFrame(cameraFrame); cameraFrame = 0; };
+    const showResultModal = (result, credentialValue) => {
       const copy = scanText[result.result] || scanText.invalid;
       const ticketType = result.ticket?.type ? `${result.ticket.type.section} · ${result.ticket.type.name}` : '';
-      const extra = result.result === 'already_used' && result.ticket?.admissions?.[0] ? `Prvi vstop: ${new Date(result.ticket.admissions[0].at).toLocaleTimeString('sl-SI', { hour: '2-digit', minute: '2-digit' })} · ${result.ticket.admissions[0].gate}` : ticketType;
-      output.replaceChildren(node('section', { class: `result ${result.result}` }, node('div', { class: 'result-icon', text: copy[0] }), node('h1', { text: copy[1] }), node('h2', { text: copy[2] }), extra ? node('p', { text: extra }) : ''));
+      const admission = result.ticket?.admissions?.[0];
+      const extra = result.result === 'already_used' && admission ? `Prvi vstop: ${new Date(admission.scannedAt).toLocaleTimeString('sl-SI', { hour: '2-digit', minute: '2-digit' })} · ${admission.gate}` : ticketType;
+      const kind = result.result === 'accepted' ? 'accepted' : result.result === 'network_error' ? 'network_error' : 'rejected';
+      const continueScanning = () => { resultModal?.remove(); resultModal = null; ignoredCredential = credentialValue; ignoreUntil = Date.now() + 1800; state = cameraStream ? 'scanning' : 'idle'; message.textContent = cameraStream ? 'POSTAVITE QR KODO V OKVIR.' : 'Kamera ni aktivna. Uporabite ročni vnos ali znova zaženite kamero.'; if (cameraStream) resumeDecoding(); else manualCode.focus(); };
+      const retry = () => { resultModal?.remove(); resultModal = null; state = 'qr_detected'; void validate(credentialValue); };
+      resultModal = node('section', { class: `scanner-result-modal ${kind}`, role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'scanner-result-title' }, node('div', { class: 'scanner-result-panel' }, node('div', { class: 'scanner-result-icon', text: copy[0] }), node('h1', { id: 'scanner-result-title', text: copy[1] }), node('h2', { text: copy[2] }), extra ? node('p', { class: 'scanner-result-detail', text: extra }) : '', result.result === 'network_error' ? node('p', { class: 'scanner-result-detail', text: 'Vstopnice trenutno ni mogoče preveriti.' }) : '', node('div', { class: 'scanner-result-actions' }, result.result === 'network_error' ? button('POSKUSI ZNOVA', 'scanner-result-retry', retry) : '', button('NADALJUJ SKENIRANJE', 'scanner-result-continue', continueScanning))));
+      output.replaceChildren(resultModal);
       if (result.result === 'accepted' && navigator.vibrate) navigator.vibrate(100);
+      if (result.result !== 'accepted' && navigator.vibrate) navigator.vibrate([70, 60, 70]);
     };
+    const showValidatingModal = () => { output.replaceChildren(node('section', { class: 'scanner-result-modal validating', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'scanner-result-title' }, node('div', { class: 'scanner-result-panel' }, node('div', { class: 'scanner-result-icon', text: '…' }), node('h1', { id: 'scanner-result-title', text: 'PREVERJAM VSTOPNICO …' }), node('p', { class: 'scanner-result-detail', text: 'Prosimo, počakajte.' })))); };
     const validate = async (rawCredential) => {
       const credentialValue = parseTicketCredential(rawCredential);
-      if (!credentialValue || state === 'validating' || state === 'showing_result') return;
-      state = 'validating';
-      message.textContent = 'Preverjam vstopnico …';
+      if (!credentialValue || !['scanning', 'qr_detected', 'idle'].includes(state)) return;
+      state = 'validating'; pauseDecoding(); message.textContent = 'PREVERJAM VSTOPNICO …'; showValidatingModal();
       let result;
-      try {
-        result = await api('/api/scans', { method: 'POST', body: JSON.stringify({ eventId: selectedEvent.id, gate: selectedGate, credential: credentialValue }) });
-      } catch {
-        result = { result: 'network_error' };
-      }
-      state = 'showing_result';
-      ignoredCredential = credentialValue;
-      ignoreUntil = Date.now() + 3000;
-      showResult(result);
-      cameraResultTimer = window.setTimeout(() => {
-        output.replaceChildren();
-        message.textContent = 'Postavite QR kodo v okvir.';
-        state = cameraStream ? 'scanning' : 'idle';
-        if (cameraStream) resumeDecoding(); else manualCode.focus();
-      }, result.result === 'accepted' ? 1400 : 2400);
+      try { result = await api('/api/scans', { method: 'POST', body: JSON.stringify({ eventId: selectedEvent.id, gate: selectedGate, credential: credentialValue }) }); }
+      catch { result = { result: 'network_error' }; }
+      state = 'result_modal'; showResultModal(result, credentialValue);
     };
     const decodeFrame = async (detector) => {
       if (state !== 'scanning' || !cameraStream) return;
@@ -123,7 +119,7 @@ async function cameraScanner() {
           }
         }
         const credentialValue = parseTicketCredential(value);
-        if (credentialValue && !(credentialValue === ignoredCredential && Date.now() < ignoreUntil)) validate(credentialValue);
+        if (credentialValue && !(credentialValue === ignoredCredential && Date.now() < ignoreUntil)) { state = 'qr_detected'; void validate(credentialValue); }
       } catch {
         message.textContent = 'QR kode trenutno ni mogoče prebrati. Poskusite znova ali uporabite ročni vnos.';
       } finally {
