@@ -4,6 +4,7 @@ declare global {
   interface Window {
     jsQR?: (data: Uint8ClampedArray, width: number, height: number) => { data: string } | null;
     __ndbCameraStops?: number;
+    __resolveCamera?: () => void;
   }
 }
 
@@ -62,7 +63,6 @@ test('camera permission failure stays distinct from ticket rejection and manual 
   await page.addInitScript(() => Object.defineProperty(navigator, 'mediaDevices', { configurable: true, value: undefined }));
   await login(page, /VARNOSTNIK/);
   await openScanner(page);
-  await page.getByRole('button', { name: 'OMOGOČI KAMERO' }).click();
   await expect(page.getByText('Skeniranje s kamero v tem brskalniku ni na voljo. Uporabite ročni vnos kode.')).toBeVisible();
   await page.getByRole('button', { name: 'ROČNI VNOS KODE' }).click();
   await expect(page.getByRole('button', { name: 'PREVERI' })).toBeVisible();
@@ -78,14 +78,52 @@ test('a decoded camera frame sends one admission request while validation is in 
     Object.defineProperty(window, 'BarcodeDetector', { configurable: true, value: class { async detect() { return [{ rawValue: credential }]; } } });
   }, issued.tickets[0].credential);
   await login(page, /VARNOSTNIK/);
-  await openScanner(page);
   let validations = 0;
   page.on('request', (request) => { if (request.url().endsWith('/api/scans')) validations += 1; });
-  await page.getByRole('button', { name: 'OMOGOČI KAMERO' }).click();
+  await openScanner(page);
   await expect(page.getByRole('heading', { name: 'VELJAVNA VSTOPNICA' })).toBeVisible();
   expect(validations).toBe(1);
   await expect(page.getByRole('heading', { name: 'VSTOPNICA JE ŽE UPORABLJENA' })).toBeVisible({ timeout: 6_000 });
   expect(validations).toBe(2);
   await page.getByRole('button', { name: 'SPREMENI VHOD' }).click();
   expect(await page.evaluate(() => window.__ndbCameraStops)).toBe(1);
+});
+
+test('start scanning requests the camera immediately and exposes a visible starting state', async ({ page }) => {
+  await page.addInitScript(() => {
+    let resolveCamera: ((value: { getTracks: () => Array<{ stop: () => void }> }) => void) | undefined;
+    Object.defineProperty(window, '__resolveCamera', { configurable: true, value: () => resolveCamera?.({ getTracks: () => [] }) });
+    Object.defineProperty(navigator, 'mediaDevices', { configurable: true, value: { getUserMedia: () => new Promise((resolve) => { resolveCamera = resolve; }) } });
+  });
+  await login(page, /VARNOSTNIK/);
+  await page.getByRole('button', { name: 'VHOD 3 — TRIBUNA' }).click();
+  await page.getByRole('button', { name: 'ZAČNI SKENIRANJE' }).click();
+  await expect(page.getByText('ZAGANJAM KAMERO … Prosimo, dovolite dostop do kamere.')).toBeVisible();
+});
+
+for (const [name, expected] of [
+  ['NotAllowedError', 'DOSTOP DO KAMERE NI DOVOLJEN.'],
+  ['NotFoundError', 'KAMERE NI MOGOČE NAJTI.'],
+  ['NotReadableError', 'KAMERA JE TRENUTNO ZASEDENA ALI NEDOSTOPNA.'],
+  ['AbortError', 'ZAGON KAMERE JE BIL PREKINJEN.']
+]) {
+  test(`camera ${name} produces an actionable visible error`, async ({ page }) => {
+    await page.addInitScript((errorName) => Object.defineProperty(navigator, 'mediaDevices', { configurable: true, value: { getUserMedia: async () => { throw new DOMException('mock', errorName); } } }), name);
+    await login(page, /VARNOSTNIK/);
+    await page.getByRole('button', { name: 'VHOD 3 — TRIBUNA' }).click();
+    await page.getByRole('button', { name: 'ZAČNI SKENIRANJE' }).click();
+    await expect(page.getByText(expected)).toBeVisible();
+    await expect(page.getByRole('button', { name: 'ZNOVA POSKUSI KAMERO' })).toBeVisible();
+  });
+}
+
+test('production-equivalent scanner delivery permits same-origin camera use and serves JavaScript assets', async ({ page }) => {
+  const scanner = await page.request.get('/scanner');
+  expect(scanner.status()).toBe(200);
+  expect(scanner.headers()['permissions-policy']).toContain('camera=(self)');
+  expect(scanner.headers()['content-security-policy']).toContain("script-src 'self'");
+  const decoder = await page.request.get('/vendor/jsqr.js');
+  expect(decoder.status()).toBe(200);
+  expect(decoder.headers()['content-type']).toContain('text/javascript');
+  expect((await decoder.text()).slice(0, 100)).not.toContain('<!doctype html');
 });

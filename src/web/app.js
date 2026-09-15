@@ -36,11 +36,14 @@ const parseTicketCredential = (value) => {
   return /^ndb_[A-Za-z0-9_-]{32}$/.test(candidate) ? candidate : null;
 };
 const cameraErrorMessage = (error) => {
-  if (!window.isSecureContext) return 'Za kamero potrebujete varno povezavo (HTTPS ali localhost). Uporabite ročni vnos kode.';
-  if (error?.name === 'NotAllowedError' || error?.name === 'SecurityError') return 'DOSTOP DO KAMERE NI DOVOLJEN. Omogočite kamero v nastavitvah brskalnika ali uporabite ročni vnos.';
+  if (!window.isSecureContext) return 'KAMERA ZAHTEVA VARNO POVEZAVO (HTTPS). Uporabite ročni vnos kode.';
+  if (error?.name === 'NotAllowedError') return 'DOSTOP DO KAMERE NI DOVOLJEN. Dovolite kamero v nastavitvah brskalnika in poskusite znova.';
+  if (error?.name === 'SecurityError') return 'VARNOSTNA POLITIKA JE PREPREČILA DOSTOP DO KAMERE. Preverite HTTPS in dovoljenje kamere.';
   if (error?.name === 'NotFoundError') return 'KAMERE NI MOGOČE NAJTI. Uporabite ročni vnos kode.';
-  if (error?.name === 'NotReadableError') return 'KAMERA JE TRENUTNO ZASEDENA. Zaprite drugo aplikacijo ali uporabite ročni vnos.';
-  return 'KAMERE NI MOGOČE ZAGNATI. Uporabite ročni vnos kode.';
+  if (error?.name === 'NotReadableError') return 'KAMERA JE TRENUTNO ZASEDENA ALI NEDOSTOPNA. Zaprite drugo aplikacijo in poskusite znova.';
+  if (error?.name === 'OverconstrainedError') return 'IZBRANE KAMERE NI MOGOČE UPORABITI. Poskusite znova ali uporabite ročni vnos.';
+  if (error?.name === 'AbortError') return 'ZAGON KAMERE JE BIL PREKINJEN. Poskusite znova.';
+  return 'KAMERE NI BILO MOGOČE ZAGNATI. Poskusite znova ali uporabite ročni vnos.';
 };
 async function cameraScanner() {
   const actor = await api('/api/session');
@@ -55,9 +58,9 @@ async function cameraScanner() {
     match.value = selectedEvent.id;
     match.addEventListener('change', () => { selectedEvent = events.find((item) => item.id === match.value) || selectedEvent; });
     const choices = gates.map((gate) => button(gate.toUpperCase(), selectedGate === gate ? 'primary gate-option selected' : 'muted gate-option', () => { selectedGate = gate; setup(); }));
-    shell(node('section', { class: 'scanner-setup' }, node('div', { class: 'eyebrow', text: 'SKENIRANJE VSTOPNIC' }), node('h1', { text: 'Priprava skenerja' }), node('label', { class: 'setup-label' }, 'TEKMA', match), node('div', { class: 'setup-label', text: 'VHOD' }), node('div', { class: 'gate-options' }, choices), button('ZAČNI SKENIRANJE', 'primary start-scan', () => { if (selectedGate) active(); })));
+    shell(node('section', { class: 'scanner-setup' }, node('div', { class: 'eyebrow', text: 'SKENIRANJE VSTOPNIC' }), node('h1', { text: 'Priprava skenerja' }), node('label', { class: 'setup-label' }, 'TEKMA', match), node('div', { class: 'setup-label', text: 'VHOD' }), node('div', { class: 'gate-options' }, choices), button('ZAČNI SKENIRANJE', 'primary start-scan', () => { if (selectedGate) active(true); })));
   };
-  const active = () => {
+  const active = (startImmediately = false) => {
     stopCamera();
     let state = 'idle';
     let ignoredCredential = '';
@@ -67,6 +70,7 @@ async function cameraScanner() {
     const output = node('div', { class: 'scanner-result' });
     const message = node('p', { class: 'camera-message', text: 'Pripravite kamero za skeniranje QR kode.' });
     const video = node('video', { class: 'camera-preview', autoplay: '', muted: '', playsinline: '' });
+    video.autoplay = true; video.muted = true; video.playsInline = true;
     const canvas = document.createElement('canvas');
     const manualCode = node('input', { required: '', placeholder: 'ndb_…', autocomplete: 'off' });
     const manual = node('form', { class: 'scan-entry manual-entry', hidden: '' }, node('label', {}, 'KODA VSTOPNICE', manualCode), button('PREVERI', 'primary large'));
@@ -131,25 +135,30 @@ async function cameraScanner() {
       if (!window.isSecureContext) { message.textContent = cameraErrorMessage(); return; }
       if (!navigator.mediaDevices?.getUserMedia) { message.textContent = 'Skeniranje s kamero v tem brskalniku ni na voljo. Uporabite ročni vnos kode.'; return; }
       cameraButton.disabled = true;
-      message.textContent = 'Odpiram kamero …';
+      cameraButton.textContent = 'ZAGANJAM KAMERO …';
+      message.textContent = 'ZAGANJAM KAMERO … Prosimo, dovolite dostop do kamere.';
       try {
         try { cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' } }, audio: false }); }
         catch (error) { if (error?.name !== 'OverconstrainedError') throw error; cameraStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false }); }
         video.srcObject = cameraStream;
         await video.play();
+        if (video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) await new Promise((resolve) => { const timeout = window.setTimeout(resolve, 600); video.addEventListener('loadeddata', () => { clearTimeout(timeout); resolve(undefined); }, { once: true }); });
         activeDetector = window.BarcodeDetector ? new window.BarcodeDetector({ formats: ['qr_code'] }) : null;
         if (!activeDetector && !window.jsQR) throw new Error('decoder_unavailable');
         state = 'scanning';
-        message.textContent = 'Postavite QR kodo v okvir.';
+        cameraButton.textContent = 'KAMERA AKTIVNA';
+        message.textContent = 'POSTAVITE QR KODO V OKVIR.';
         resumeDecoding();
       } catch (error) {
         stopCamera();
         cameraButton.disabled = false;
+        cameraButton.textContent = 'ZNOVA POSKUSI KAMERO';
         message.textContent = error?.message === 'decoder_unavailable' ? 'QR skener v tem brskalniku ni na voljo. Uporabite ročni vnos kode.' : cameraErrorMessage(error);
       }
     };
     manual.addEventListener('submit', (event) => { event.preventDefault(); validate(manualCode.value); });
     shell(node('section', { class: 'scanner-active' }, node('div', { class: 'scanner-topline' }, node('div', {}, node('strong', { text: `BELTINCI — ${selectedEvent.opponent.toUpperCase()}` }), node('span', { text: selectedGate.toUpperCase() })), button('SPREMENI VHOD', 'muted', setup)), node('section', { class: 'camera-zone' }, video, node('div', { class: 'camera-frame', 'aria-hidden': 'true' }), node('div', { class: 'camera-copy' }, node('h1', { text: 'SKENIRAJ VSTOPNICO' }), node('p', { class: 'camera-caption', text: 'Usmerite QR kodo v okvir.' }))), message, node('div', { class: 'scanner-actions' }, cameraButton, manualToggle), manual, output));
+    if (startImmediately) void startCamera();
   };
   setup();
 }
