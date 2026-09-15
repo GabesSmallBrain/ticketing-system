@@ -1,0 +1,321 @@
+{
+  "clubs": [
+    {
+      "id": "club_beltinci",
+      "name": "ND Beltinci"
+    },
+    {
+      "id": "club_demo_fc",
+      "name": "Demo FC"
+    }
+  ],
+  "events": [
+    {
+      "id": "evt-mura",
+      "clubId": "club_beltinci",
+      "slug": "beltinci-mura",
+      "opponent": "NŠ Mura",
+      "kickoff": "2026-10-14T16:30:00",
+      "competition": "POKAL PIVOVARNA UNION — DEMO",
+      "venue": "Športni park Beltinci",
+      "salesStart": "2026-08-15T08:00:00.000Z",
+      "salesEnd": "2026-10-14T13:30:00.000Z",
+      "salesOpen": true,
+      "demo": true,
+      "baseSold": 1137,
+      "baseScanned": 742,
+      "baseRevenue": 13245
+    },
+    {
+      "id": "evt-triglav",
+      "clubId": "club_beltinci",
+      "slug": "beltinci-triglav",
+      "opponent": "NK Triglav Kranj",
+      "kickoff": "2026-10-25T18:00:00",
+      "competition": "DRUGA LIGA — DEMO",
+      "venue": "Športni park Beltinci",
+      "salesStart": "2026-08-15T08:00:00.000Z",
+      "salesEnd": "2026-10-25T16:00:00.000Z",
+      "salesOpen": true,
+      "demo": true,
+      "baseSold": 170,
+      "baseScanned": 80,
+      "baseRevenue": 1820
+    },
+    {
+      "id": "evt-tabor",
+      "clubId": "club_beltinci",
+      "slug": "beltinci-tabor",
+      "opponent": "Tabor Sežana",
+      "kickoff": "2026-11-08T14:00:00",
+      "competition": "DRUGA LIGA — DEMO",
+      "venue": "Športni park Beltinci",
+      "salesStart": "2026-08-15T08:00:00.000Z",
+      "salesEnd": "2026-11-08T12:00:00.000Z",
+      "salesOpen": true,
+      "demo": true,
+      "baseSold": 170,
+      "baseScanned": 80,
+      "baseRevenue": 1820
+    },
+    {
+      "id": "evt-ilirija",
+      "clubId": "club_beltinci",
+      "slug": "beltinci-ilirija",
+      "opponent": "ND Ilirija 1911",
+      "kickoff": "2026-11-22T14:00:00",
+      "competition": "DRUGA LIGA — DEMO",
+      "venue": "Športni park Beltinci",
+      "salesStart": "2026-08-15T08:00:00.000Z",
+      "salesEnd": "2026-11-22T12:00:00.000Z",
+      "salesOpen": true,
+      "demo": true,
+      "baseSold": 170,
+      "baseScanned": 80,
+      "baseRevenue": 1820
+    }
+  ],
+  "ticketTypes": [
+    {
+      "id": "evt-mura-0",
+      "eventId": "evt-mura",
+      "clubId": "club_beltinci",
+      "section": "Tribuna",
+      "name": "Odrasli",
+      "price": 15,
+      "capacity": 500,
+      "sold": 391,
+      "active": true
+    },
+    {
+      "id": "evt-mura-1",
+      "eventId": "evt-mura",
+      "clubId": "club_beltinci",
+      "section": "Tribuna",
+      "name": "Mladi",
+      "price": 5,
+      "capacity": 500,
+      "sold": 44,
+      "active": true
+    },
+    {
+      "id": "evt-mura-2",
+      "eventId": "evt-mura",
+      "clubId": "club_beltinci",
+      "section": "Stojišče",
+      "name": "Odrasli",
+      "price": 10,
+      "capacity": 2000,
+      "sold": 680,
+      "active": true
+    },
+    {
+      "id": "evt-mura-3",
+      "eventId": "evt-mura",
+      "clubId": "club_beltinci",
+      "section": "Stojišče",
+      "name": "Mladi",
+      "price": 0,
+      "capacity": 2000,
+      "sold": 23,
+      "active": true
+    },
+    {
+      "id": "evt-triglav-0",
+      "eventId": "evt-triglav",
+      "clubId": "club_beltinci",
+      "section": "Tribuna",
+      "name": "Odrasli",
+      "price": 15,
+      "capacity": 500,
+      "sold": 20,
+      "active": true
+    },
+    {
+      "id": "evt-triglav-1",
+      "eventId": "evt-triglav",
+      "clubId": "club_beltinci",
+      "section": "Tribuna",
+      "name": "Mladi",
+      "price": 5,
+      "capacity": 500,
+      "sold": 20,
+      "active": true
+    },
+    {
+      "id": "evt-triglav-2",
+      "eventId": "evt-triglav",
+      "clubId": "club_beltinci",
+      "section": "Stojišče",
+      "name": "Odrasli",
+      "price": 10,
+      "capacity": 2000,
+      "sold": 20,
+      "active": true
+    },
+    {
+      "id": "evt-triglav-3",
+      "eventId": "evt-triglav",
+      "clubId": "club_beltinci",
+      "section": "Stojišče",
+      "name": "Mladi",
+      "price": 0,
+      "capacity": 2000,
+      "sold": 20,
+      "active": true
+    },
+    {
+      "id": "evt-tabor-0",
+      "eventId": "evt-tabor",
+      "clubId": "club_beltinci",
+      "section": "Tribuna",
+      "name": "Odrasli",
+      "price": 15,
+      "capacity": 500,
+      "sold": 20,
+      "active": true
+    },
+    {
+      "id": "evt-tabor-1",
+      "eventId": "evt-tabor",
+      "clubId": "club_beltinci",
+      "section": "Tribuna",
+      "name": "Mladi",
+      "price": 5,
+      "capacity": 500,
+      "sold": 20,
+      "active": true
+    },
+    {
+      "id": "evt-tabor-2",
+      "eventId": "evt-tabor",
+      "clubId": "club_beltinci",
+      "section": "Stojišče",
+      "name": "Odrasli",
+      "price": 10,
+      "capacity": 2000,
+      "sold": 20,
+      "active": true
+    },
+    {
+      "id": "evt-tabor-3",
+      "eventId": "evt-tabor",
+      "clubId": "club_beltinci",
+      "section": "Stojišče",
+      "name": "Mladi",
+      "price": 0,
+      "capacity": 2000,
+      "sold": 20,
+      "active": true
+    },
+    {
+      "id": "evt-ilirija-0",
+      "eventId": "evt-ilirija",
+      "clubId": "club_beltinci",
+      "section": "Tribuna",
+      "name": "Odrasli",
+      "price": 15,
+      "capacity": 500,
+      "sold": 20,
+      "active": true
+    },
+    {
+      "id": "evt-ilirija-1",
+      "eventId": "evt-ilirija",
+      "clubId": "club_beltinci",
+      "section": "Tribuna",
+      "name": "Mladi",
+      "price": 5,
+      "capacity": 500,
+      "sold": 20,
+      "active": true
+    },
+    {
+      "id": "evt-ilirija-2",
+      "eventId": "evt-ilirija",
+      "clubId": "club_beltinci",
+      "section": "Stojišče",
+      "name": "Odrasli",
+      "price": 10,
+      "capacity": 2000,
+      "sold": 20,
+      "active": true
+    },
+    {
+      "id": "evt-ilirija-3",
+      "eventId": "evt-ilirija",
+      "clubId": "club_beltinci",
+      "section": "Stojišče",
+      "name": "Mladi",
+      "price": 0,
+      "capacity": 2000,
+      "sold": 20,
+      "active": true
+    }
+  ],
+  "orders": [
+    {
+      "id": "3db85a48-2a50-4cee-8c8c-ff54a34627a8",
+      "reference": "NAR-611A4DE127",
+      "accessToken": "ndb_fVFV3RBYNxJgAQ3anxWX1QfKVGa-7kIz",
+      "paymentSecret": "ndb_N9_sTaeXlPlBs2BT8k5nV8t8rFKp9zk_",
+      "clubId": "club_beltinci",
+      "eventId": "evt-mura",
+      "customer": {
+        "firstName": "Ana",
+        "lastName": "Navijac",
+        "email": "ana@example.test"
+      },
+      "channel": "ONLINE",
+      "status": "PAID",
+      "amount": 15,
+      "createdAt": "2026-09-15T09:47:30.126Z",
+      "paymentStatus": "SUCCEEDED",
+      "items": [
+        {
+          "ticketTypeId": "evt-mura-0",
+          "quantity": 1,
+          "price": 15
+        }
+      ],
+      "providerTransaction": "supporter_demo_3db85a48-2a50-4cee-8c8c-ff54a34627a8"
+    }
+  ],
+  "tickets": [
+    {
+      "id": "33fab670-390d-483e-94d7-2737769e76e5",
+      "reference": "VST-94AC8F9B1E",
+      "credential": "ndb_-gix9EcXPZ7UrQWwc2715bRnbrvLufy8",
+      "clubId": "club_beltinci",
+      "eventId": "evt-mura",
+      "orderId": "3db85a48-2a50-4cee-8c8c-ff54a34627a8",
+      "ticketTypeId": "evt-mura-0",
+      "status": "VALID",
+      "issuedAt": "2026-09-15T09:47:30.209Z",
+      "admissions": []
+    }
+  ],
+  "audits": [
+    {
+      "id": "bad4fc22-7b79-4767-a708-192ac2f0fb00",
+      "clubId": "club_beltinci",
+      "type": "payment.confirmed",
+      "at": "2026-09-15T09:47:30.209Z",
+      "detail": "NAR-611A4DE127"
+    },
+    {
+      "id": "7cb23fa7-e900-4479-bf07-3a4e5e08354c",
+      "clubId": "club_beltinci",
+      "type": "ticket.issued",
+      "at": "2026-09-15T09:47:30.209Z",
+      "detail": "VST-94AC8F9B1E"
+    },
+    {
+      "id": "32bf9501-9309-4781-ad5b-6620b096fc84",
+      "clubId": "club_beltinci",
+      "type": "order.created",
+      "at": "2026-09-15T09:47:30.126Z",
+      "detail": "NAR-611A4DE127"
+    }
+  ]
+}
