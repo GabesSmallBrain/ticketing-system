@@ -26,7 +26,7 @@ test('club admin persists match details, controls sales, and keeps issued ticket
   await page.getByLabel('Začetek prodaje').fill('2026-08-20T09:00');
   await page.getByLabel('Konec prodaje').fill('2026-10-16T17:15');
   await page.getByRole('button', { name: 'SHRANI SPREMEMBE' }).click();
-  await expect(page.getByText('✓ SPREMEMBE SHRANJENE')).toBeVisible();
+  await expect(page.getByText('✓ Spremembe so shranjene.')).toBeVisible();
   await page.reload();
   await expect(page.getByRole('heading', { name: 'BELTINCI — NK DEMO UNITED' })).toBeVisible();
   await expect(page.getByLabel('Prizorišče')).toHaveValue('Glavno igrišče Beltinci');
@@ -39,9 +39,10 @@ test('club admin persists match details, controls sales, and keeps issued ticket
   await expect(page.getByRole('heading', { name: 'BELTINCI — NK DEMO UNITED' })).toBeVisible();
 
   await page.goto('/admin/tekme/evt-mura');
-  page.once('dialog', (dialog) => dialog.accept());
   await page.getByRole('button', { name: 'USTAVI PRODAJO' }).click();
-  await expect(page.getByText('✓ SPREMEMBE SHRANJENE')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Ustavim prodajo?' })).toBeVisible();
+  await page.getByRole('button', { name: 'USTAVI PRODAJO' }).last().click();
+  await expect(page.getByText('✓ Spremembe so shranjene.')).toBeVisible();
   expect((await eventPayload(page)).salesOpen).toBe(false);
   const blocked = await page.evaluate(() => fetch('/api/checkout', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ eventId: 'evt-mura', firstName: 'Janez', lastName: 'Novak', email: 'janez@example.test', items: [{ ticketTypeId: 'evt-mura-0', quantity: 1 }] }) }).then(async (response) => ({ status: response.status, body: await response.json() })));
   expect(blocked.status).toBe(400);
@@ -57,7 +58,7 @@ test('club admin persists match details, controls sales, and keeps issued ticket
   await login(page, /ADMINISTRATOR/);
   await page.goto('/admin/tekme/evt-mura');
   await page.getByRole('button', { name: 'ODPRI PRODAJO' }).click();
-  await expect(page.getByText('✓ SPREMEMBE SHRANJENE')).toBeVisible();
+  await expect(page.getByText('✓ Spremembe so shranjene.')).toBeVisible();
   expect((await eventPayload(page)).salesOpen).toBe(true);
 
   const invalid = await page.evaluate(async (event) => fetch('/api/admin/events/evt-mura', { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ ...event, opponent: '' }) }).then(async (response) => ({ status: response.status, body: await response.json() })), await eventPayload(page));
@@ -77,4 +78,14 @@ test('box-office and gate-staff roles cannot mutate a match', async ({ page }) =
   expect(await page.evaluate((data) => fetch('/api/admin/events/evt-mura', { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify(data) }).then((response) => response.status), payload)).toBe(403);
   await login(page, /VARNOSTNIK/);
   expect(await page.evaluate((data) => fetch('/api/admin/events/evt-mura', { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify(data) }).then((response) => response.status), payload)).toBe(403);
+});
+
+test('event update rejects unauthenticated and invalid ticket category changes', async ({ page }) => {
+  const payload = { opponent: 'NŠ Mura', competition: 'Demo', venue: 'Beltinci', kickoff: '2026-10-14T16:30', salesStart: '2026-08-15T08:00', salesEnd: '2026-10-14T15:30', salesOpen: true };
+  await page.goto('/');
+  expect(await page.evaluate((data) => fetch('/api/admin/events/evt-mura', { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify(data) }).then((response) => response.status), payload)).toBe(403);
+  await login(page, /ADMINISTRATOR/);
+  const invalid = await page.evaluate((data) => fetch('/api/admin/events/evt-mura', { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ ...data, ticketTypes: [{ id: 'evt-mura-0', price: -1, capacity: -1, active: true }] }) }).then(async (response) => ({ status: response.status, body: await response.json() })), payload);
+  expect(invalid.status).toBe(400);
+  expect(invalid.body.error).toContain('Cena');
 });

@@ -15,7 +15,7 @@
       "clubId": "club_beltinci",
       "slug": "beltinci-mura",
       "opponent": "NŠ Mura",
-      "kickoff": "2026-10-14T16:30:00",
+      "kickoff": "2026-10-14T14:30:00.000Z",
       "competition": "POKAL PIVOVARNA UNION — DEMO",
       "venue": "Športni park Beltinci",
       "salesStart": "2026-08-15T08:00:00.000Z",
@@ -82,9 +82,9 @@
       "clubId": "club_beltinci",
       "section": "Tribuna",
       "name": "Odrasli",
-      "price": 15,
+      "price": 10,
       "capacity": 500,
-      "sold": 391,
+      "sold": 393,
       "active": true
     },
     {
@@ -255,21 +255,21 @@
   ],
   "orders": [
     {
-      "id": "3db85a48-2a50-4cee-8c8c-ff54a34627a8",
-      "reference": "NAR-611A4DE127",
-      "accessToken": "ndb_fVFV3RBYNxJgAQ3anxWX1QfKVGa-7kIz",
-      "paymentSecret": "ndb_N9_sTaeXlPlBs2BT8k5nV8t8rFKp9zk_",
+      "id": "3cc98efc-7b17-46a8-ac67-790682f4ac8a",
+      "reference": "NAR-4D4C7CDAA6",
+      "accessToken": "ndb__rSeFVIARTIvynN6dJ2dmPblSexkXtN9",
+      "paymentSecret": "ndb_1pGifdPndUPbpw47XtXfJNmqrVuyk8T7",
       "clubId": "club_beltinci",
       "eventId": "evt-mura",
       "customer": {
-        "firstName": "Ana",
-        "lastName": "Navijac",
-        "email": "ana@example.test"
+        "firstName": "Vizual",
+        "lastName": "Preizkus",
+        "email": "visual@example.test"
       },
       "channel": "ONLINE",
       "status": "PAID",
       "amount": 15,
-      "createdAt": "2026-09-15T09:47:30.126Z",
+      "createdAt": "2026-09-17T20:05:05.501Z",
       "paymentStatus": "SUCCEEDED",
       "items": [
         {
@@ -278,44 +278,169 @@
           "price": 15
         }
       ],
-      "providerTransaction": "supporter_demo_3db85a48-2a50-4cee-8c8c-ff54a34627a8"
+      "providerTransaction": "supporter_demo_3cc98efc-7b17-46a8-ac67-790682f4ac8a"
+    },
+    {
+      "id": "0fbbd8b5-d95a-47df-888d-f5db45056622",
+      "reference": "NAR-DD35541000",
+      "accessToken": "ndb_xRlAICGNh1A5uViNByrSymwBgpdbb251",
+      "paymentSecret": "ndb_qtppsfVRw2QQJlL8pU-NP5k080vAwnf-",
+      "clubId": "club_beltinci",
+      "eventId": "evt-mura",
+      "customer": {
+        "firstName": "Vizual",
+        "lastName": "Preizkus",
+        "email": "visual2@example.test"
+      },
+      "channel": "ONLINE",
+      "status": "PAID",
+      "amount": 15,
+      "createdAt": "2026-09-17T20:05:48.614Z",
+      "paymentStatus": "SUCCEEDED",
+      "items": [
+        {
+          "ticketTypeId": "evt-mura-0",
+          "quantity": 1,
+          "price": 15
+        }
+      ],
+      "providerTransaction": "supporter_demo_0fbbd8b5-d95a-47df-888d-f5db45056622"
+    },
+    {
+      "id": "4784f7ff-810d-40e7-a022-20861f087664",
+      "reference": "NAR-6B7DCB34B6",
+      "accessToken": "ndb_-4ac5ZnuvKyNoVeQaQMZo5VE9PdImDSw",
+      "paymentSecret": "ndb_LHJBV-ljqNPWg8RuPwfJiZEpmpYCvkon",
+      "clubId": "club_beltinci",
+      "eventId": "evt-mura",
+      "customer": {
+        "firstName": "Gabriel",
+        "lastName": "Zadravec",
+        "email": "gabi.zadravec@gmail.com"
+      },
+      "channel": "ONLINE",
+      "status": "PAID",
+      "amount": 10,
+      "createdAt": "2026-09-17T20:07:37.898Z",
+      "paymentStatus": "SUCCEEDED",
+      "items": [
+        {
+          "ticketTypeId": "evt-mura-0",
+          "quantity": 1,
+          "price": 10
+        }
+      ],
+      "providerTransaction": "supporter_demo_4784f7ff-810d-40e7-a022-20861f087664"
     }
   ],
   "tickets": [
     {
-      "id": "33fab670-390d-483e-94d7-2737769e76e5",
-      "reference": "VST-94AC8F9B1E",
-      "credential": "ndb_-gix9EcXPZ7UrQWwc2715bRnbrvLufy8",
+      "id": "e578592f-5df8-4b4b-ae02-07d431ac8764",
+      "reference": "VST-81F6C6CA49",
+      "credential": "ndb_Iqerly2raPmLUR4nRsfn2hLTAkmsLbQE",
       "clubId": "club_beltinci",
       "eventId": "evt-mura",
-      "orderId": "3db85a48-2a50-4cee-8c8c-ff54a34627a8",
+      "orderId": "3cc98efc-7b17-46a8-ac67-790682f4ac8a",
       "ticketTypeId": "evt-mura-0",
       "status": "VALID",
-      "issuedAt": "2026-09-15T09:47:30.209Z",
+      "issuedAt": "2026-09-17T20:05:05.564Z",
+      "admissions": []
+    },
+    {
+      "id": "8afca0b8-cb71-493b-8fae-c3a24722281c",
+      "reference": "VST-32327D1E51",
+      "credential": "ndb_STtd9Noa0O6-tS_ujkZznSP0w4WF-pYV",
+      "clubId": "club_beltinci",
+      "eventId": "evt-mura",
+      "orderId": "0fbbd8b5-d95a-47df-888d-f5db45056622",
+      "ticketTypeId": "evt-mura-0",
+      "status": "VALID",
+      "issuedAt": "2026-09-17T20:05:48.679Z",
+      "admissions": []
+    },
+    {
+      "id": "5753387e-4bda-4357-a607-b1331c292e2d",
+      "reference": "VST-8DC7025FF5",
+      "credential": "ndb_5YNsReZN4-I4M9RlulUGz-8LEOklPYX9",
+      "clubId": "club_beltinci",
+      "eventId": "evt-mura",
+      "orderId": "4784f7ff-810d-40e7-a022-20861f087664",
+      "ticketTypeId": "evt-mura-0",
+      "status": "VALID",
+      "issuedAt": "2026-09-17T20:07:38.837Z",
       "admissions": []
     }
   ],
   "audits": [
     {
-      "id": "bad4fc22-7b79-4767-a708-192ac2f0fb00",
+      "id": "1e4d9a1a-19bf-4577-8eb1-b9f65a1cf42e",
       "clubId": "club_beltinci",
       "type": "payment.confirmed",
-      "at": "2026-09-15T09:47:30.209Z",
-      "detail": "NAR-611A4DE127"
+      "at": "2026-09-17T20:07:38.837Z",
+      "detail": "NAR-6B7DCB34B6"
     },
     {
-      "id": "7cb23fa7-e900-4479-bf07-3a4e5e08354c",
+      "id": "aa9889f2-7b2e-442b-acce-d06b06c24eff",
       "clubId": "club_beltinci",
       "type": "ticket.issued",
-      "at": "2026-09-15T09:47:30.209Z",
-      "detail": "VST-94AC8F9B1E"
+      "at": "2026-09-17T20:07:38.837Z",
+      "detail": "VST-8DC7025FF5"
     },
     {
-      "id": "32bf9501-9309-4781-ad5b-6620b096fc84",
+      "id": "ac97f9a3-7962-48a2-a92e-dd3afef8a940",
       "clubId": "club_beltinci",
       "type": "order.created",
-      "at": "2026-09-15T09:47:30.126Z",
-      "detail": "NAR-611A4DE127"
+      "at": "2026-09-17T20:07:37.899Z",
+      "detail": "NAR-6B7DCB34B6"
+    },
+    {
+      "id": "d8a21269-de3a-4149-97bf-48d86eb85332",
+      "clubId": "club_beltinci",
+      "type": "event.updated",
+      "at": "2026-09-17T20:07:17.240Z",
+      "detail": "evt-mura"
+    },
+    {
+      "id": "d03fa679-da86-4ce9-94c3-54d03a526ce2",
+      "clubId": "club_beltinci",
+      "type": "payment.confirmed",
+      "at": "2026-09-17T20:05:48.679Z",
+      "detail": "NAR-DD35541000"
+    },
+    {
+      "id": "27d90b4d-dc9b-4025-8f32-bc65fab970b9",
+      "clubId": "club_beltinci",
+      "type": "ticket.issued",
+      "at": "2026-09-17T20:05:48.679Z",
+      "detail": "VST-32327D1E51"
+    },
+    {
+      "id": "353a3050-303a-4957-860d-e7f2500146b5",
+      "clubId": "club_beltinci",
+      "type": "order.created",
+      "at": "2026-09-17T20:05:48.614Z",
+      "detail": "NAR-DD35541000"
+    },
+    {
+      "id": "ccd2f2c2-5781-4f71-a1e3-5406472a36f9",
+      "clubId": "club_beltinci",
+      "type": "payment.confirmed",
+      "at": "2026-09-17T20:05:05.564Z",
+      "detail": "NAR-4D4C7CDAA6"
+    },
+    {
+      "id": "15b78bba-a2c2-4687-ab95-c4ab953735eb",
+      "clubId": "club_beltinci",
+      "type": "ticket.issued",
+      "at": "2026-09-17T20:05:05.564Z",
+      "detail": "VST-81F6C6CA49"
+    },
+    {
+      "id": "8b8d0325-0486-49f3-bca9-6957260d052b",
+      "clubId": "club_beltinci",
+      "type": "order.created",
+      "at": "2026-09-17T20:05:05.501Z",
+      "detail": "NAR-4D4C7CDAA6"
     }
   ]
 }

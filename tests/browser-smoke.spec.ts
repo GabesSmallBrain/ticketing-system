@@ -92,11 +92,11 @@ test('gate staff admits a box-office ticket once and rejects the duplicate', asy
   const input = page.getByPlaceholder('ndb_…');
   await input.fill(issued.tickets[0].credential);
   await page.getByRole('button', { name: 'PREVERI' }).click();
-  await expect(page.getByRole('heading', { name: 'VELJAVNA VSTOPNICA' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'VSTOPNICA JE VELJAVNA' })).toBeVisible();
   await page.getByRole('button', { name: 'POTRDI' }).click();
   await input.fill(issued.tickets[0].credential);
   await page.getByRole('button', { name: 'PREVERI' }).click();
-  await expect(page.getByRole('heading', { name: 'VSTOPNICA JE ŽE UPORABLJENA' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'VSTOPNICA NI VELJAVNA' })).toBeVisible();
 });
 
 test('role switch replaces the old cookie session', async ({ page }) => {

@@ -12,15 +12,19 @@
     "test:e2e": "playwright test",
     "db:migrate": "tsx src/scripts/migrate.ts",
     "db:seed": "tsx src/scripts/seed.ts",
+    "create-admin": "tsx src/scripts/create-admin.ts",
     "security": "npm audit --omit=dev"
   },
   "dependencies": {
+    "argon2": "^0.45.1",
     "jsqr": "^1.4.0",
+    "pg": "^8.23.0",
     "qrcode": "^1.5.4"
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0",
     "@types/node": "^22.10.2",
+    "@types/pg": "^8.23.1",
     "@types/qrcode": "^1.5.5",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2"

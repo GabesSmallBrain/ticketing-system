@@ -1,6 +1,8 @@
 # Hostinger deployment
 
-This archive is a Node.js application, not a static site.
+This archive is a Node.js application, not a static site. It requires a managed
+PostgreSQL instance reachable through `DATABASE_URL`; JSON files are not a
+production datastore.
 
 In Hostinger hPanel, create a **Node.js Web App** (not a static website/Website Builder entry) and upload this archive or connect its contents to a Git repository. Attach the intended hostname to that Node.js app; a static Hostinger site cannot serve this application's API or direct-route fallback.
 
@@ -15,5 +17,15 @@ NODE_ENV: production
 ```
 
 Set `PORT` only if Hostinger supplies one. Do not upload an `.env` file or any API keys.
+Set secrets in hPanel: `DATABASE_URL`, `SESSION_SECRET` (32+ random bytes),
+`APP_ORIGIN`, `PAYMENT_PROVIDER`, and `PAYMENT_WEBHOOK_SECRET`. The process
+fails at startup in production when any is absent or `PAYMENT_PROVIDER=demo`.
 
-The application writes demo state to `data/demo.json`, so that directory must remain writable. This is a demonstration system only: payments and staff authentication are simulated, and its JSON data store is not suitable for real ticket sales.
+Run `npm run db:migrate` exactly once against the production database, then run
+`npm run create-admin` with one-time `BOOTSTRAP_ADMIN_EMAIL`,
+`BOOTSTRAP_ADMIN_PASSWORD` (14+ characters), `BOOTSTRAP_ADMIN_NAME`, and
+`BOOTSTRAP_CLUB_ID` environment values. Remove those bootstrap values after a
+successful run. There is no public staff registration path.
+
+Deploy a staging application first with a separate database, non-production
+payment credentials, staff test accounts, HTTPS, and an authorized Strix target.
