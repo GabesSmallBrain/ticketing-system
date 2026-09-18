@@ -38,6 +38,31 @@ The four supplied images were visually inspected at native resolution on 17 Sept
 - **Controls:** 48px+ manual entry and confirmation targets; mobile bottom navigation. The real video replaces only the simulated scan preview—the frame, dimensions and foreground result hierarchy remain.
 - **Special interaction:** scanning pauses before validation; the result is a fixed body portal above all camera/navigation layers and requires `POTRDI` before rearming.
 
+## Reference 05 — administration dashboard (new chat reference)
+
+- **Target route:** `/admin`; **viewport:** 1488 × 1600 desktop.
+- **Hierarchy:** 74px staff header, operational breadcrumb/status strip, then a 134px live-fixture command panel. The panel pairs the real next event with a two-by-two yellow action matrix.
+- **Grid:** four 339px metric cards, then a 2:1 sales/channel and activity grid, followed by a 3-up gate-status block and a full-width operational notice.
+- **Patterns to reuse:** dark staff shell, compact current-match capsule, active blue navigation tab, 12px navy cards, dense mono labels, white condensed figures, yellow monetary/action emphasis, and emerald operational states. All metrics/activity must remain sourced from actual reporting/audit data; absent data uses truthful empty states.
+
+## Reference 06 — administration match management (new chat reference)
+
+- **Target route:** `/admin/tekme`; **viewport:** 1180 × 1600 desktop.
+- **Hierarchy:** compact staff header; oversized `UPRAVLJANJE TEKEM` title and real-data action row; four compact summary cards; a segmented match filter; then high-density full-width match rows.
+- **Match row:** coloured left status rule, state/competition chips, prominent fixture/date/venue, capacity/revenue summaries, and a narrow vertical action stack. The existing editor route remains the functional destination for `UREDI TEKMO`.
+- **Restrictions:** no fake circular percentages, attendee counts, protocol messages, or export behavior where the API does not supply them.
+
+## Reference 07 — administration orders (new chat reference)
+
+- **Closest existing route:** no `/admin/narocila` route is currently implemented; `/narocilo/:id` exists as an individual staff order view. **Viewport:** 1280 × 1800 desktop.
+- **Future route policy:** retain as `BLOCKED` until a real authorized orders-list endpoint exists; do not create a static order dashboard. The reference establishes staff table/filter, metric-card, payment-channel, and status-badge patterns for the existing order detail and future list.
+
+## Reference 08 — administration ticket management (new chat reference)
+
+- **Target route:** `/admin/vstopnice`; **viewport:** 1138 × 1600 desktop.
+- **Hierarchy:** large title plus real summary counters, large search/filter slab, compact result command row, high-density ticket result cards, then lower operational metric/action modules.
+- **States:** exact visual vocabulary for valid (blue/emerald), redeemed (emerald), and cancelled (red/struck) tickets. Existing search and cancellation stay real; unsupported duplicate-printing, terminal telemetry, and turnstile actions are not represented as working controls.
+
 ## Shared reconstruction tokens
 
 `--ref-canvas #071225`, `--ref-header #050b14`, `--ref-panel #101c31`, `--ref-panel-raised #1d2a40`, `--ref-border #22324c`, `--ref-blue #0f6edc`, `--ref-yellow #ffd21f`, `--ref-green #00e58c`, `--ref-red #ff4d55`, `--ref-muted #8190a8`. Use 8px spacing rhythm, 12px panel radius, 8px controls, and only tight structural shadowing.
