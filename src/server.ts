@@ -5,7 +5,7 @@ import QRCode from 'qrcode';
 import { audit, CLUB, credential, issueTickets, redeem, reference, type Channel, type Order, type Role } from './domain.js';
 import { mutate, readDb, reset } from './db.js';
 
-const port = Number(process.env.PORT ?? 3000); const staticRoot = join(process.cwd(), 'src', 'web');
+const port = Number(process.env.PORT ?? 3000); const staticRoot = join(process.cwd(), process.env.NODE_ENV === 'production' ? 'dist/web' : 'src/web');
 const staffRoute = (path: string) => path === '/demo-login' || path === '/prijava-za-osebje' || path === '/scanner' || path === '/admin' || path.startsWith('/admin/');
 const json = (res: ServerResponse, code: number, body: unknown) => { res.writeHead(code, { 'content-type': 'application/json; charset=utf-8' }); res.end(JSON.stringify(body)); };
 const body = async (req: IncomingMessage): Promise<Record<string, unknown>> => new Promise((resolve, reject) => { let data = ''; req.on('data', (x: Buffer) => { data += x; if (data.length > 100_000) reject(new Error('Prevelika zahteva')); }); req.on('end', () => { try { resolve(data ? JSON.parse(data) as Record<string, unknown> : {}); } catch { reject(new Error('Neveljavni podatki')); } }); });
