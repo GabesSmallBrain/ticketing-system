@@ -1,0 +1,92 @@
+/* Stitch homepage only. Normal flow is deliberate: real event names and crest
+   aspect ratios may vary, so no content is positioned with offsets or clipped. */
+body.stitch-home { --home-space-1: 8px; --home-space-2: 14px; --home-space-3: 20px; --home-space-4: 32px; --home-space-5: 44px; background: #050e20; color: #e2e8f0; }
+body.stitch-home .shop-header { height: 80px; background: #050e20ee; border-bottom: 1px solid #263550; box-shadow: none; }
+body.stitch-home .shop-header-inner { height: 80px; }
+body.stitch-home .shop-main { display: block; max-width: 414px; padding: 22px 16px 102px; }
+body.stitch-home .shop-footer { display: none; }
+body.stitch-home .shop-nav { display: none; }
+body.stitch-home .staff-login-link { display: none; }
+
+body.stitch-home .stitch-home-hero { display: grid; gap: var(--home-space-3); min-width: 0; padding: var(--home-space-3); border: 1px solid #2b5280; border-radius: 18px; background: linear-gradient(145deg, #111f38, #09162a); }
+body.stitch-home .stitch-home-badges { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+body.stitch-home .stitch-home-badges > span { min-width: 0; }
+body.stitch-home .stitch-home-badges > span:first-child { max-width: calc(100% - 112px); overflow-wrap: anywhere; }
+body.stitch-home .stitch-home-occupancy { flex: 0 0 auto; }
+body.stitch-home .stitch-home-hero h1 { margin: 0; padding: 2px 4px 0; color: #ffd21f; text-align: center; font: 800 20px/1.22 "Barlow Condensed", "Arial Narrow", sans-serif; letter-spacing: .06em; overflow-wrap: anywhere; }
+
+body.stitch-home .stitch-home-teams { display: grid; grid-template-columns: minmax(0, 1fr) 38px minmax(0, 1fr); align-items: center; gap: var(--home-space-1); padding: var(--home-space-3) var(--home-space-2); border-radius: 13px; background: #081225; }
+body.stitch-home .stitch-home-teams > div { display: grid; min-width: 0; justify-items: center; gap: var(--home-space-1); }
+body.stitch-home .stitch-home-teams .shop-crest,
+body.stitch-home .stitch-home-away-mark { width: 64px; height: 64px; padding: 4px; object-fit: contain; }
+body.stitch-home .stitch-home-teams strong { min-width: 0; color: #fff; text-align: center; font: 800 17px/1.12 "Barlow Condensed", "Arial Narrow", sans-serif; overflow-wrap: anywhere; }
+body.stitch-home .stitch-home-teams > i { display: grid; width: 32px; height: 32px; place-items: center; border: 1px solid #344157; border-radius: 50%; color: #a9b6c7; font: 800 13px/1 "Barlow Condensed", sans-serif; }
+
+body.stitch-home .stitch-home-meta { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--home-space-2); }
+body.stitch-home .stitch-home-meta > div { min-width: 0; min-height: 76px; padding: var(--home-space-2); }
+body.stitch-home .stitch-home-meta strong { overflow-wrap: anywhere; }
+body.stitch-home .stitch-home-progress { display: grid; gap: var(--home-space-1); }
+body.stitch-home .stitch-home-progress > div { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; min-width: 0; }
+body.stitch-home .stitch-home-progress > div > * { min-width: 0; }
+body.stitch-home .stitch-home-progress b { text-align: right; white-space: nowrap; }
+body.stitch-home .stitch-home-primary { width: 100%; min-height: 58px !important; padding: 12px 16px !important; text-align: center; white-space: normal; }
+
+body.stitch-home .stitch-home-section { display: grid; gap: var(--home-space-3); margin-top: var(--home-space-4); }
+body.stitch-home .stitch-season-section { display: grid; gap: var(--home-space-3); margin-top: var(--home-space-5); }
+body.stitch-home .stitch-home-section-heading { display: grid; grid-template-columns: 5px minmax(0, 1fr) auto; align-items: center; gap: 9px; min-width: 0; }
+body.stitch-home .stitch-home-section-heading > i { display: block; width: 5px; height: 22px; border-radius: 99px; background: #ffd21f; }
+body.stitch-home .stitch-home-section-heading h2 { min-width: 0; margin: 0; padding: 0; border: 0; color: #fff; font: 800 22px/1.05 "Barlow Condensed", "Arial Narrow", sans-serif; overflow-wrap: anywhere; }
+body.stitch-home .stitch-home-section-heading span { justify-self: end; }
+body.stitch-home .stitch-season-section .stitch-home-section-heading { grid-template-columns: 5px minmax(0, 1fr); }
+
+body.stitch-home .stitch-home-match { display: grid; gap: var(--home-space-2); min-width: 0; min-height: 0; padding: var(--home-space-3); border: 1px solid #2a3b54; border-radius: 13px; background: #0f1a2e; }
+body.stitch-home .stitch-home-match-top { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--home-space-1); padding-bottom: var(--home-space-2); border-bottom: 1px solid #26354b; }
+body.stitch-home .stitch-home-match-top span,
+body.stitch-home .stitch-home-match-top time { min-width: 0; overflow-wrap: anywhere; }
+body.stitch-home .stitch-home-match-top time { text-align: right; }
+body.stitch-home .stitch-home-fixture { display: grid; grid-template-columns: minmax(0, 1fr) 28px minmax(0, 1fr); align-items: center; gap: var(--home-space-1); padding: 2px 0; }
+body.stitch-home .stitch-home-fixture > div { display: grid; min-width: 0; justify-items: center; gap: 6px; }
+body.stitch-home .stitch-home-fixture .shop-crest,
+body.stitch-home .stitch-home-card-crest { width: 42px; height: 42px; object-fit: contain; }
+body.stitch-home .stitch-home-fixture strong { min-width: 0; color: #fff; text-align: center; font: 800 16px/1.08 "Barlow Condensed", sans-serif; overflow-wrap: anywhere; }
+body.stitch-home .stitch-home-fixture small { color: #9caabd; font: 700 9px/1 "JetBrains Mono", monospace; letter-spacing: .05em; }
+body.stitch-home .stitch-home-match-bottom { display: flex; align-items: center; justify-content: space-between; gap: var(--home-space-2); min-width: 0; padding-top: 2px; }
+body.stitch-home .stitch-home-match-bottom > span { min-width: 0; overflow-wrap: anywhere; }
+body.stitch-home .stitch-home-card-cta { flex: 0 0 auto; max-width: 190px; min-height: 40px !important; white-space: normal; text-align: center; }
+
+body.stitch-home .stitch-season-card { display: grid; gap: var(--home-space-3); min-width: 0; padding: 22px 18px 18px; border: 2px solid #b38f12; border-radius: 17px; background: linear-gradient(135deg, #121d32, #0c1627); }
+body.stitch-home .stitch-season-card-top { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: var(--home-space-3); }
+body.stitch-home .stitch-season-card-top > span { min-width: 0; overflow-wrap: anywhere; }
+body.stitch-home .stitch-season-card-top > div { display: grid; justify-items: end; gap: 5px; }
+body.stitch-home .stitch-season-card-top strong { margin: 0; color: #ffd21f; font: 900 27px/1 "Barlow Condensed", sans-serif; white-space: nowrap; }
+body.stitch-home .stitch-season-card-top small { color: #aebbd0; font: 700 9px/1 "JetBrains Mono", monospace; white-space: nowrap; }
+body.stitch-home .stitch-season-card h2 { margin: 4px 0 0; color: #fff; font: 800 23px/1.08 "Barlow Condensed", sans-serif; overflow-wrap: anywhere; }
+body.stitch-home .stitch-season-card p { margin: 0; color: #bdc8d8; line-height: 1.5; }
+body.stitch-home .stitch-season-card .stitch-home-primary { margin-top: 4px; }
+
+@media (max-width: 390px) {
+  body.stitch-home .shop-main { padding-left: 14px; padding-right: 14px; }
+  body.stitch-home .stitch-home-hero { padding: 14px; }
+  body.stitch-home .stitch-home-hero h1 { font-size: 18px; }
+  body.stitch-home .stitch-home-badges > span:first-child { max-width: calc(100% - 102px); }
+  body.stitch-home .stitch-home-teams { grid-template-columns: minmax(0, 1fr) 32px minmax(0, 1fr); padding: 12px 7px; }
+  body.stitch-home .stitch-home-teams strong { font-size: 15px; }
+  body.stitch-home .stitch-home-match-bottom { align-items: flex-start; flex-direction: column; }
+  body.stitch-home .stitch-home-card-cta { width: 100%; max-width: none; }
+}
+
+@media (max-width: 699px) {
+  body.stitch-home .stitch-season-card-top { grid-template-columns: minmax(0, 1fr); gap: var(--home-space-2); }
+  body.stitch-home .stitch-season-card-top > div { justify-items: start; gap: 4px; }
+  body.stitch-home .stitch-season-card-top strong { font-size: 32px; }
+}
+
+@media (min-width: 700px) {
+  body.stitch-home .shop-header-inner { max-width: 1120px; margin: auto; }
+  body.stitch-home .shop-nav,
+  body.stitch-home .staff-login-link { display: flex; }
+  body.stitch-home .shop-main { max-width: 980px; padding: 42px 32px 64px; }
+  body.stitch-home .stitch-home-section { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+  body.stitch-home .stitch-home-section-heading { grid-column: 1 / -1; }
+  body.stitch-home .stitch-season-section { max-width: 100%; }
+}

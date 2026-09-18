@@ -62,5 +62,4 @@ ruvector.db
 *.bak
 *.backup
 
-.ai
-scripts
+stitch*

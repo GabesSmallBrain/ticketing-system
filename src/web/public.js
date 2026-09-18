@@ -1,3 +1,5 @@
+import { clubAsset } from '/assets/clubs/manifest.js';
+
 const app = document.querySelector('#public-app');
 const euro = new Intl.NumberFormat('sl-SI', { style: 'currency', currency: 'EUR' });
 const dateTime = (value) => new Intl.DateTimeFormat('sl-SI', { dateStyle: 'full', timeStyle: 'short', timeZone: 'Europe/Ljubljana' }).format(new Date(value));
@@ -15,16 +17,44 @@ const orderAccess = (id) => sessionStorage.getItem(`beltinci-order-${id}`) || ''
 const ownedOrders = () => JSON.parse(sessionStorage.getItem(ordersKey) || '[]');
 const rememberOrder = (id) => sessionStorage.setItem(ordersKey, JSON.stringify([...new Set([id, ...ownedOrders()]) ]));
 const status = (event, types = []) => { const now = Date.now(); if (!event.salesOpen || new Date(event.salesEnd).getTime() < now) return ['closed', 'PRODAJA VSTOPNIC JE ZAPRTA']; if (new Date(event.salesStart).getTime() > now) return ['pending', 'PRODAJA ŠE NI ODPRTA']; if (types.length && types.every((type) => type.capacity - type.sold <= 0)) return ['soldout', 'RAZPRODANO']; return ['open', 'PRODAJA ODPRTA']; };
-const crest = (small = false) => el('span', { class: `shop-crest ${small ? 'small' : ''}`, text: 'NDB' });
-function header() { return el('header', { class: 'shop-header' }, el('div', { class: 'shop-header-inner' }, el('a', { class: 'shop-brand', href: '/' }, crest(), el('span', {}, el('strong', { text: 'ND BELTINCI' }), el('small', { text: 'VSTOPNICE' }))), el('nav', { class: 'shop-nav', 'aria-label': 'Glavna navigacija' }, el('a', { href: '/vstopnice', text: 'VSTOPNICE' }), el('a', { href: '/sezonske', text: 'SEZONSKE VSTOPNICE' }), el('a', { href: '/moje-vstopnice', text: 'MOJE VSTOPNICE' })), el('a', { class: 'staff-login-link', href: '/prijava-za-osebje', text: 'PRIJAVA ZA OSEBJE' }))); }
+const crest = (small = false) => el('img', { class: `shop-crest crest-image ${small ? 'small' : ''}`, src: clubAsset('ND Beltinci'), alt: 'Grb ND Beltinci' });
+const clubCrest = (club, className = 'club-crest') => {
+  const src = clubAsset(club);
+  return src
+    ? el('img', { class: `crest-image ${className}`, src, alt: `Grb ${club}` })
+    : el('span', { class: `${className} club-crest-fallback`, text: club.slice(0, 2).toUpperCase(), 'aria-label': `Grb za ${club} ni na voljo` });
+};
+function header() {
+  const menuId = 'public-mobile-menu';
+  let open = false;
+  const panel = el('nav', { class: 'public-mobile-menu', id: menuId, 'aria-label': 'Mobilna navigacija', hidden: '' },
+    el('a', { href: '/', text: 'VSTOPNICE' }),
+    el('a', { href: '/sezonske', text: 'SEZONSKE VSTOPNICE' }),
+    el('a', { href: '/moje-vstopnice', text: 'MOJE VSTOPNICE' }),
+    el('a', { class: 'public-mobile-staff-link', href: '/prijava-za-osebje', text: 'PRIJAVA ZA OSEBJE' })
+  );
+  panel.querySelectorAll('a').forEach((item) => { if (item.getAttribute('href') === location.pathname) { item.classList.add('active'); item.setAttribute('aria-current', 'page'); } });
+  const toggle = button('☰', 'public-mobile-menu-toggle', () => setOpen(!open));
+  toggle.setAttribute('aria-label', 'Odpri navigacijo');
+  toggle.setAttribute('aria-controls', menuId);
+  toggle.setAttribute('aria-expanded', 'false');
+  const setOpen = (value) => {
+    open = value;
+    panel.hidden = !open;
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Zapri navigacijo' : 'Odpri navigacijo');
+    toggle.textContent = open ? '×' : '☰';
+    if (open) panel.querySelector('a')?.focus();
+  };
+  panel.addEventListener('click', () => setOpen(false));
+  panel.addEventListener('keydown', (event) => { if (event.key === 'Escape') { setOpen(false); toggle.focus(); } });
+  toggle.addEventListener('keydown', (event) => { if (event.key === 'Escape' && open) { setOpen(false); toggle.focus(); } });
+  return el('header', { class: 'shop-header' }, el('div', { class: 'shop-header-inner' }, el('a', { class: 'shop-brand', href: '/' }, crest(), el('span', {}, el('strong', { text: 'ND BELTINCI' }), el('small', { text: 'VSTOPNICE' }))), el('nav', { class: 'shop-nav', 'aria-label': 'Glavna navigacija' }, el('a', { href: '/', text: 'VSTOPNICE' }), el('a', { href: '/sezonske', text: 'SEZONSKE VSTOPNICE' }), el('a', { href: '/moje-vstopnice', text: 'MOJE VSTOPNICE' })), el('a', { class: 'staff-login-link', href: '/prijava-za-osebje', text: 'PRIJAVA ZA OSEBJE' }), toggle, panel));
+}
 function shell(...content) { app.replaceChildren(header(), el('main', { class: 'shop-main' }, content), el('footer', { class: 'shop-footer' }, el('div', {}, el('strong', { text: 'ND BELTINCI' }), el('span', { text: 'Vstopnice · Sezonske vstopnice · Moje vstopnice' })), el('div', { class: 'footer-actions' }, el('span', { text: 'Varno demo plačilo · QR vstopnice' }), el('a', { href: '/prijava-za-osebje', text: 'PRIJAVA ZA OSEBJE' })))); }
-function errorPage(error) { shell(el('section', { class: 'shop-empty' }, el('span', { class: 'eyebrow', text: 'OBVESTILO' }), el('h1', { text: 'Nekaj ni uspelo.' }), el('p', { text: error.message || 'Poskusite znova.' }), link('NAZAJ NA VSTOPNICE', '/vstopnice'))); }
+function errorPage(error) { shell(el('section', { class: 'shop-empty' }, el('span', { class: 'eyebrow', text: 'OBVESTILO' }), el('h1', { text: 'Nekaj ni uspelo.' }), el('p', { text: error.message || 'Poskusite znova.' }), link('NAZAJ NA VSTOPNICE', '/'))); }
 function matchTitle(event) { return `ND Beltinci — ${event.opponent}`; }
 function matchMeta(event) { return el('div', { class: 'match-meta' }, el('span', { text: dateOnly(event.kickoff) }), el('span', { text: new Intl.DateTimeFormat('sl-SI', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Ljubljana' }).format(new Date(event.kickoff)) }), el('span', { text: event.venue })); }
-function matchCard(event, types) { const [state, label] = status(event, types); const lowest = Math.min(...types.filter((type) => type.capacity > type.sold).map((type) => type.price)); return el('article', { class: 'match-card' }, el('div', { class: 'card-topline' }, el('span', { class: 'competition', text: event.competition }), el('span', { class: `status ${state}`, text: label })), el('div', { class: 'teams-line' }, crest(true), el('h2', { text: `BELTINCI — ${event.opponent.toUpperCase()}` })), matchMeta(event), el('div', { class: 'card-bottom' }, Number.isFinite(lowest) ? el('span', { class: 'from-price', text: `od ${euro.format(lowest)}` }) : el('span'), state === 'open' ? link('KUPI VSTOPNICE', `/vstopnice/${event.slug}`, 'button navy') : el('span', { class: 'unavailable', text: label })));
-}
-async function home() { const { events, ticketTypes } = await api('/api/events'); const [featured, ...rest] = events; const types = ticketTypes.filter((type) => type.eventId === featured.id); const [state, label] = status(featured, types); shell(el('section', { class: 'shop-hero' }, el('div', { class: 'hero-stadium' }), el('div', { class: 'hero-copy' }, el('span', { class: 'eyebrow yellow', text: 'NASLEDNJA DOMAČA TEKMA' }), el('p', { class: 'hero-competition', text: featured.competition }), el('p', { class: 'hero-fixture', text: matchTitle(featured) }), el('h1', { text: 'Beltinčani na domačem terenu.' }), el('div', { class: 'hero-matchup' }, crest(), el('span', { text: 'ND BELTINCI' }), el('i', { text: 'VS' }), el('span', { text: featured.opponent.toUpperCase() })), matchMeta(featured), state === 'open' ? link('KUPI VSTOPNICE', `/vstopnice/${featured.slug}`, 'button primary hero-action') : el('span', { class: `status ${state}`, text: label }))), el('aside', { class: 'hero-match-card' }, el('span', { class: 'eyebrow', text: 'MATCHDAY' }), el('strong', { text: dateOnly(featured.kickoff) }), el('strong', { text: new Intl.DateTimeFormat('sl-SI', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Ljubljana' }).format(new Date(featured.kickoff)) }), el('small', { text: featured.venue }))), el('section', { class: 'shop-section' }, el('div', { class: 'section-head' }, el('div', {}, el('span', { class: 'eyebrow blue', text: 'VSTOPNICE' }), el('h2', { text: 'Prihajajoče tekme' })), link('VSE TEKME', '/vstopnice', 'text-link')), el('div', { class: 'match-grid' }, [featured, ...rest].map((event) => matchCard(event, ticketTypes.filter((type) => type.eventId === event.id))))), el('section', { class: 'trust-strip' }, ['ENOSTAVEN NAKUP', 'OSEBNA QR VSTOPNICA', 'HITER VSTOP'].map((item, index) => el('div', {}, el('b', { text: `0${index + 1}` }), el('span', { text: item })))); }
-async function allMatches() { const { events, ticketTypes } = await api('/api/events'); shell(el('section', { class: 'page-heading' }, el('span', { class: 'eyebrow blue', text: 'ND BELTINCI' }), el('h1', { text: 'Vstopnice za tekme' }), el('p', { text: 'Izberite domačo tekmo in si pravočasno zagotovite mesto na tribuni.' })), el('section', { class: 'match-grid all-matches' }, events.map((event) => matchCard(event, ticketTypes.filter((type) => type.eventId === event.id))))); }
 function quantityRow(type, amount, onChange, disabled) { return el('article', { class: 'ticket-type' }, el('div', { class: 'ticket-type-icon', text: type.section.slice(0, 1) }), el('div', { class: 'ticket-type-copy' }, el('span', { class: 'eyebrow blue', text: type.section }), el('h3', { text: type.name }), el('small', { text: `${type.capacity - type.sold} prostih mest` })), el('strong', { class: 'ticket-price', text: type.price ? euro.format(type.price) : 'BREZPLAČNO' }), el('div', { class: 'stepper' }, disable(button('−', 'step', () => onChange(-1)), disabled || !amount), el('output', { text: String(amount) }), disable(button('+', 'step', () => onChange(1)), disabled || amount >= Math.min(10, type.capacity - type.sold)))); }
 async function eventPage(slug) {
   const [{ event, ticketTypes }, { events }] = await Promise.all([api(`/api/events/${slug}`), api('/api/events')]);
@@ -51,6 +81,23 @@ async function eventPage(slug) {
       el('div', { class: 'summary-total' }, el('span', { text: 'SKUPAJ' }), el('strong', { text: euro.format(total) })),
       count && state === 'open' ? link('NADALJUJ', '/kosarica', 'button primary full') : el('p', { class: 'summary-note', text: state === 'open' ? 'Izberite vsaj eno vstopnico.' : label })
     );
+    if (innerWidth <= 760) {
+      document.body.classList.add('stitch-ticket-selection');
+      const occupied = activeTypes.reduce((sum, type) => sum + type.sold, 0);
+      const totalCapacity = activeTypes.reduce((sum, type) => sum + type.capacity, 0);
+      const occupancy = totalCapacity ? Math.round((occupied / totalCapacity) * 100) : 0;
+      const mobileCard = (type) => el('article', { class: `stitch-select-ticket${selected.items[type.id] ? ' is-selected' : ''}` },
+        el('div', { class: 'stitch-select-ticket-head' }, el('div', {}, el('h3', { text: `${type.section} — ${type.name}` }), el('span', { text: `${Math.max(0, type.capacity - type.sold)} prostih mest` })), el('strong', { text: type.price ? euro.format(type.price) : 'BREZPLAČNO' })),
+        el('div', { class: 'stitch-select-ticket-control' }, el('span', { text: 'Izberite število:' }), el('div', { class: 'stepper' }, disable(button('−', 'step', () => setQuantity(type, -1)), !selected.items[type.id]), el('output', { text: String(selected.items[type.id] || 0) }), disable(button('+', 'step', () => setQuantity(type, 1)), (selected.items[type.id] || 0) >= Math.min(10, type.capacity - type.sold))))
+      );
+      shell(
+        el('section', { class: 'stitch-select-intro' }, link('‹', '/', 'stitch-select-back'), el('div', {}, el('span', { text: '02 VSTOPNICE' }), el('h1', { text: 'IZBIRA VSTOPNIC' }))),
+        el('section', { class: 'stitch-select-match' }, el('div', { class: 'stitch-select-match-top' }, el('span', { text: event.competition }), el('b', { text: `${occupancy}% ZASEDENO` })), el('div', { class: 'stitch-select-teams' }, el('div', {}, crest(true), el('strong', { text: 'ND BELTINCI' })), el('em', { text: 'VS' }), el('div', {}, clubCrest(event.opponent, 'stitch-select-crest'), el('strong', { text: event.opponent }))), el('div', { class: 'stitch-select-match-meta' }, el('span', { text: dateTime(event.kickoff).replace(',', ' ·') }), el('span', { text: event.venue }))),
+        el('section', { class: 'stitch-select-catalogue' }, el('div', { class: 'stitch-select-catalogue-head' }, el('h2', { text: 'KATEGORIJE VSTOPNIC' }), el('span', { text: 'Maks. 10 kart' })), ...activeTypes.map(mobileCard), el('p', { class: 'stitch-select-note', text: '✓ Takojšnja digitalna QR vstopnica · Vstop z mobilnim telefonom' })),
+        el('div', { class: 'stitch-select-checkout' }, el('div', {}, el('span', { text: `SKUPAJ: ${count} VSTOPNIC${count === 1 ? 'A' : ''}` }), el('strong', { text: euro.format(total) })), count ? link('NADALJUJ NA BLAGAJNO →', '/kosarica', 'button primary') : el('span', { class: 'stitch-select-disabled', text: 'IZBERITE VSTOPNICE' }))
+      );
+      return;
+    }
     const selection = el('section', { class: 'selection-layout' },
       el('div', {}, el('div', { class: 'section-head' }, el('div', {}, el('span', { class: 'eyebrow blue', text: 'KORAK 1 OD 2' }), el('h2', { text: 'IZBIRA SEKTORJA IN VSTOPNIC' }))),
         el('section', { class: 'ref-stadium-map' }, el('div', {}, el('strong', { text: `Tloris stadiona ${event.venue}` }), el('span', { text: `${activeTypes.reduce((sum, type) => sum + Math.max(0, type.capacity - type.sold), 0)} PROSTIH MEST` })), el('div', { class: 'ref-pitch', text: 'IGRIŠČE ND BELTINCI' })),
@@ -66,7 +113,7 @@ async function eventPage(slug) {
     );
     const upcoming = events.filter((item) => item.id !== event.id).slice(0, 3);
     shell(
-      el('section', { class: 'match-banner' }, el('div', { class: 'ref-hero-copy' }, el('span', { class: 'eyebrow yellow', text: event.competition }), el('p', { class: 'ref-hero-kicker', text: 'URADNA KLUBSKA BLAGAJNA' }), el('div', { class: 'match-banner-teams' }, crest(), el('h1', { text: 'ND BELTINCI VSTOPNICE' })), el('p', { class: 'ref-hero-support', text: 'Skupaj za žute. Izberite vstopnico in jo pokažite ob vstopu.' }), matchMeta(event)), el('aside', { class: 'ref-hero-fixture' }, el('span', { class: 'status pending', text: state === 'open' ? 'VISOKO POVPRAŠEVANJE' : label }), el('div', {}, crest(true), el('strong', { text: 'ND BELTINCI' }), el('small', { text: 'DOMAČI' })), el('b', { text: 'VS' }), el('div', {}, el('strong', { text: event.opponent.toUpperCase() }), el('small', { text: event.competition })), el('div', { class: 'ref-fixture-meta', text: `${dateOnly(event.kickoff)} · ${event.venue}` }))),
+      el('section', { class: 'match-banner' }, el('div', { class: 'ref-hero-copy' }, el('span', { class: 'eyebrow yellow', text: event.competition }), el('p', { class: 'ref-hero-kicker', text: 'URADNA KLUBSKA BLAGAJNA' }), el('div', { class: 'match-banner-teams' }, crest(), el('h1', { text: 'ND BELTINCI VSTOPNICE' })), el('p', { class: 'ref-hero-support', text: 'Skupaj za žute. Izberite vstopnico in jo pokažite ob vstopu.' }), matchMeta(event)), el('aside', { class: 'ref-hero-fixture' }, el('span', { class: 'status pending', text: state === 'open' ? 'VISOKO POVPRAŠEVANJE' : label }), el('div', {}, crest(true), el('strong', { text: 'ND BELTINCI' }), el('small', { text: 'DOMAČI' })), el('b', { text: 'VS' }), el('div', {}, clubCrest(event.opponent, 'club-crest ref-fixture-crest'), el('strong', { text: event.opponent.toUpperCase() }), el('small', { text: event.competition })), el('div', { class: 'ref-fixture-meta', text: `${dateOnly(event.kickoff)} · ${event.venue}` }))),
       selection,
       upcoming.length ? el('section', { class: 'ref-upcoming' }, el('div', { class: 'ref-upcoming-head' }, el('span', { class: 'eyebrow yellow', text: 'RAZPORED TEKEM' }), el('h2', { text: 'PRIHAJAJOČE TEKME V ŠPORTNEM PARKU' })), el('div', { class: 'ref-upcoming-grid' }, upcoming.map((item) => el('article', { class: 'ref-upcoming-card' }, el('span', { class: 'status open', text: item.salesOpen ? 'PRODAJA ODPRTA' : 'NI V PRODAJI' }), el('h3', { text: `BELTINCI VS ${item.opponent.toUpperCase()}` }), matchMeta(item), link('IZBERI VSTOPNICE', `/vstopnice/${item.slug}`, 'button ghost full'))))) : ''
     );
@@ -75,27 +122,28 @@ async function eventPage(slug) {
 }
 async function cartPage() {
   const selected = cart();
-  if (!selected.eventId) return location.assign('/vstopnice');
+  if (!selected.eventId) return shell(el('section', { class: 'stitch-cart-empty' }, el('span', { class: 'eyebrow yellow', text: 'KOŠARICA' }), el('h1', { text: 'Košarica je prazna' }), el('p', { text: 'Izberite vstopnice za naslednjo domačo tekmo.' }), link('POGLEJ TEKME', '/', 'button primary')));
   const { events } = await api('/api/events'); const event = events.find((item) => item.id === selected.eventId);
-  if (!event) return location.assign('/vstopnice');
+  if (!event) return location.assign('/');
   const { ticketTypes } = await api(`/api/events/${event.slug}`); const [state, label] = status(event, ticketTypes);
   const draw = () => {
     const items = ticketTypes.filter((type) => selected.items[type.id]);
     const total = items.reduce((sum, type) => sum + selected.items[type.id] * type.price, 0);
-    const set = (type, change) => { const next = selected.items[type.id] + change; if (next > 0) selected.items[type.id] = next; else delete selected.items[type.id]; setCart(selected); draw(); };
+    const set = (type, change) => { const next = selected.items[type.id] + change; const maximum = Math.min(10, Math.max(0, type.capacity - type.sold)); if (next > 0 && next <= maximum) selected.items[type.id] = next; else if (next <= 0) delete selected.items[type.id]; setCart(selected); draw(); };
     const itemNodes = items.map((type) => el('article', { class: 'cart-line' },
-      el('div', {}, el('span', { class: 'eyebrow blue', text: type.section }), el('h2', { text: type.name }), el('p', { text: `${selected.items[type.id]} × ${euro.format(type.price)}` })),
-      el('div', {}, el('strong', { text: euro.format(selected.items[type.id] * type.price) }), el('div', { class: 'stepper compact-stepper' }, button('−', 'step', () => set(type, -1)), el('output', { text: String(selected.items[type.id]) }), button('+', 'step', () => set(type, 1))))
+      el('div', { class: 'stitch-cart-line-copy' }, el('span', { class: 'eyebrow blue', text: type.section }), el('h2', { text: type.name }), el('p', { text: `Cena ${euro.format(type.price)} / vstopnico` })),
+      el('div', { class: 'stitch-cart-line-action' }, el('strong', { text: euro.format(selected.items[type.id] * type.price) }), el('span', { text: `${selected.items[type.id]} × ${euro.format(type.price)}` }), el('div', { class: 'stepper compact-stepper' }, button('−', 'step', () => set(type, -1)), el('output', { text: String(selected.items[type.id]) }), disable(button('+', 'step', () => set(type, 1)), selected.items[type.id] >= Math.min(10, Math.max(0, type.capacity - type.sold)))))
     ));
-    const list = el('div', { class: 'cart-items' }, el('div', { class: 'cart-match-label', text: matchTitle(event) }), ...itemNodes, !items.length ? el('p', { text: 'Košarica je prazna.' }) : '');
-    const summary = el('aside', { class: 'cart-summary' }, el('span', { class: 'eyebrow', text: `${items.reduce((sum, item) => sum + selected.items[item.id], 0)} VSTOPNICE` }), el('div', { class: 'summary-total' }, el('span', { text: 'SKUPAJ' }), el('strong', { text: euro.format(total) })), items.length && state === 'open' ? link('NADALJUJ NA PLAČILO', '/checkout', 'button primary full') : el('p', { class: 'summary-note', text: label }));
-    shell(el('section', { class: 'page-heading compact' }, el('span', { class: 'eyebrow blue', text: 'KORAK 2 OD 2' }), el('h1', { text: 'Vaše vstopnice' })), el('section', { class: 'cart-layout' }, list, summary));
+    const count = items.reduce((sum, item) => sum + selected.items[item.id], 0);
+    const list = el('div', { class: 'cart-items' }, el('div', { class: 'stitch-cart-match' }, el('div', { class: 'stitch-cart-crests' }, crest(true), clubCrest(event.opponent, 'stitch-cart-crest')), el('div', {}, el('span', { class: 'eyebrow yellow', text: event.competition }), el('strong', { text: matchTitle(event) }), el('small', { text: `${dateTime(event.kickoff).replace(',', ' ·')} · ${event.venue}` }))), ...itemNodes);
+    const summary = el('aside', { class: 'cart-summary stitch-cart-summary' }, el('span', { class: 'eyebrow', text: `${count} ${count === 1 ? 'VSTOPNICA' : 'VSTOPNICE'}` }), el('div', { class: 'summary-total' }, el('span', { text: 'SKUPAJ' }), el('strong', { text: euro.format(total) })), items.length && state === 'open' ? link('NADALJUJ NA BLAGAJNO', '/checkout', 'button primary full') : el('p', { class: 'summary-note', text: label }));
+    shell(el('section', { class: 'stitch-cart-heading' }, link('‹', `/vstopnice/${event.slug}`, 'stitch-cart-back'), el('div', {}, el('span', { class: 'eyebrow yellow', text: 'KORAK 2 OD 3' }), el('h1', { text: 'KOŠARICA' }))), el('section', { class: 'cart-layout stitch-cart-layout' }, list, summary));
   };
   draw();
 }
 async function checkout() {
   const selected = cart(); const { events } = await api('/api/events'); const event = events.find((item) => item.id === selected.eventId);
-  if (!event) return location.assign('/vstopnice');
+  if (!event) return location.assign('/');
   const { ticketTypes } = await api(`/api/events/${event.slug}`); const items = ticketTypes.filter((type) => selected.items[type.id]).map((type) => ({ ...type, quantity: selected.items[type.id] }));
   if (!items.length) return location.assign('/kosarica');
   const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0); const form = el('form', { class: 'supporter-form' });
@@ -110,8 +158,8 @@ async function checkout() {
   shell(el('section', { class: 'page-heading compact' }, el('span', { class: 'eyebrow blue', text: 'ZAKLJUČEK NAKUPA' }), el('h1', { text: 'Vaši podatki' })), el('section', { class: 'checkout-layout' }, form, summary));
 }
 async function payment(id) { const { order } = await api(`/api/orders/${id}`, { headers: { 'x-order-access': orderAccess(id) } }); const complete = async () => { try { const result = await api('/api/payments/callback', { method: 'POST', headers: { 'x-demo-payment-secret': sessionStorage.getItem(`beltinci-payment-${id}`) || '' }, body: JSON.stringify({ orderId: id, outcome: 'success', transaction: `supporter_demo_${id}` }) }); rememberOrder(result.order.id); sessionStorage.removeItem(cartKey); location.assign(`/nakup/uspesen?order=${id}`); } catch (error) { errorPage(error); } }; shell(el('section', { class: 'payment-state' }, el('div', { class: 'payment-spinner' }), el('span', { class: 'eyebrow yellow', text: 'DEMO PLAČILO' }), el('h1', { text: 'Obdelujemo plačilo' }), el('p', { text: 'Prosimo, potrdite demo plačilo. Vstopnice se izdajo šele po potrditvi.' }), button(`POTRDI ${euro.format(order.amount)}`, 'button primary', complete))); }
-async function success() { const id = new URLSearchParams(location.search).get('order'); if (!id) return location.assign('/'); const { order, tickets } = await api(`/api/orders/${id}`, { headers: { 'x-order-access': orderAccess(id) } }); shell(el('section', { class: 'purchase-success' }, el('div', { class: 'success-mark', text: '✓' }), el('span', { class: 'eyebrow', text: 'PLAČILO POTRJENO' }), el('h1', { text: 'Nakup uspešen' }), el('p', { text: 'Vaše vstopnice so pripravljene.' }), el('div', { class: 'success-total' }, el('strong', { text: `${tickets.length} VSTOPNICE` }), el('strong', { text: euro.format(order.amount) })), link('PRIKAŽI VSTOPNICE', `/moje-vstopnice?order=${id}`, 'button primary'), link('NAZAJ NA VSTOPNICE', '/vstopnice', 'button ghost'))); }
-async function myTickets() { const selectedId = new URLSearchParams(location.search).get('order'); const ids = selectedId ? [selectedId, ...ownedOrders().filter((id) => id !== selectedId)] : ownedOrders(); const orders = (await Promise.all(ids.map(async (id) => { try { return await api(`/api/orders/${id}`, { headers: { 'x-order-access': orderAccess(id) } }); } catch { return null; } }))).filter(Boolean); const tickets = orders.flatMap((item) => item.tickets); const label = (ticket) => ticket.status === 'CANCELLED' ? ['cancelled', 'PREKLICANA'] : ticket.admissions.length ? ['used', 'UPORABLJENA'] : ['valid', 'VELJAVNA']; shell(el('section', { class: 'page-heading compact' }, el('span', { class: 'eyebrow blue', text: 'VAŠ RAČUN' }), el('h1', { text: 'Moje vstopnice' })), tickets.length ? el('section', { class: 'wallet-grid' }, tickets.map((ticket) => { const [kind, text] = label(ticket); return el('article', { class: 'wallet-card' }, el('span', { class: `status ${kind}`, text }), el('h2', { text: matchTitle(ticket.event) }), el('p', { text: `${dateTime(ticket.event.kickoff)} · ${ticket.event.venue}` }), el('strong', { text: `${ticket.type.section} — ${ticket.type.name}` }), link('ODPRI VSTOPNICO', `/vstopnica/${ticket.id}?order=${ticket.orderId}`, 'button navy full')); })) : el('section', { class: 'shop-empty' }, el('h2', { text: 'Še nimate vstopnic.' }), el('p', { text: 'Ko opravite nakup na tej napravi, bodo vaše QR vstopnice prikazane tukaj.' }), link('POGLEJ TEKME', '/vstopnice'))); }
+async function success() { const id = new URLSearchParams(location.search).get('order'); if (!id) return location.assign('/'); const { order, tickets } = await api(`/api/orders/${id}`, { headers: { 'x-order-access': orderAccess(id) } }); shell(el('section', { class: 'purchase-success' }, el('div', { class: 'success-mark', text: '✓' }), el('span', { class: 'eyebrow', text: 'PLAČILO POTRJENO' }), el('h1', { text: 'Nakup uspešen' }), el('p', { text: 'Vaše vstopnice so pripravljene.' }), el('div', { class: 'success-total' }, el('strong', { text: `${tickets.length} VSTOPNICE` }), el('strong', { text: euro.format(order.amount) })), link('PRIKAŽI VSTOPNICE', `/moje-vstopnice?order=${id}`, 'button primary'), link('NAZAJ NA VSTOPNICE', '/', 'button ghost'))); }
+async function myTickets() { const selectedId = new URLSearchParams(location.search).get('order'); const ids = selectedId ? [selectedId, ...ownedOrders().filter((id) => id !== selectedId)] : ownedOrders(); const orders = (await Promise.all(ids.map(async (id) => { try { return await api(`/api/orders/${id}`, { headers: { 'x-order-access': orderAccess(id) } }); } catch { return null; } }))).filter(Boolean); const tickets = orders.flatMap((item) => item.tickets); const label = (ticket) => ticket.status === 'CANCELLED' ? ['cancelled', 'PREKLICANA'] : ticket.admissions.length ? ['used', 'UPORABLJENA'] : ['valid', 'VELJAVNA']; shell(el('section', { class: 'page-heading compact' }, el('span', { class: 'eyebrow blue', text: 'VAŠ RAČUN' }), el('h1', { text: 'Moje vstopnice' })), tickets.length ? el('section', { class: 'wallet-grid' }, tickets.map((ticket) => { const [kind, text] = label(ticket); return el('article', { class: 'wallet-card' }, el('span', { class: `status ${kind}`, text }), el('h2', { text: matchTitle(ticket.event) }), el('p', { text: `${dateTime(ticket.event.kickoff)} · ${ticket.event.venue}` }), el('strong', { text: `${ticket.type.section} — ${ticket.type.name}` }), link('ODPRI VSTOPNICO', `/vstopnica/${ticket.id}?order=${ticket.orderId}`, 'button navy full')); })) : el('section', { class: 'shop-empty' }, el('h2', { text: 'Še nimate vstopnic.' }), el('p', { text: 'Ko opravite nakup na tej napravi, bodo vaše QR vstopnice prikazane tukaj.' }), link('POGLEJ TEKME', '/'))); }
 async function ticketPage(id) {
   document.body.classList.add('ref-digital-ticket');
   const orderId = new URLSearchParams(location.search).get('order'); const headers = { 'x-order-access': orderAccess(orderId) };
@@ -140,7 +188,34 @@ async function ticketPage(id) {
     )
   ));
 }
+async function stitchHome() {
+  document.body.classList.add('stitch-home');
+  const { events, ticketTypes } = await api('/api/events');
+  const [featured, ...upcoming] = events;
+  const typesFor = (event) => ticketTypes.filter((type) => type.eventId === event.id && type.active);
+  const availability = (event) => typesFor(event).reduce((sum, type) => sum + Math.max(0, type.capacity - type.sold), 0);
+  const capacity = (event) => typesFor(event).reduce((sum, type) => sum + type.capacity, 0);
+  const occupied = capacity(featured) ? Math.min(100, Math.round(((capacity(featured) - availability(featured)) / capacity(featured)) * 100)) : 0;
+  const shortDate = new Intl.DateTimeFormat('sl-SI', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Ljubljana' }).format(new Date(featured.kickoff)).toUpperCase();
+  const matchCard = (event) => el('article', { class: 'stitch-home-match' },
+    el('div', { class: 'stitch-home-match-top' }, el('span', { text: event.competition }), el('time', { text: new Intl.DateTimeFormat('sl-SI', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Ljubljana' }).format(new Date(event.kickoff)).toUpperCase() })),
+    el('div', { class: 'stitch-home-fixture' }, el('div', {}, crest(true), el('strong', { text: 'ND BELTINCI' }), el('small', { text: 'DOMAČI' })), el('i', { text: 'VS' }), el('div', {}, clubCrest(event.opponent, 'stitch-home-card-crest'), el('strong', { text: event.opponent.toUpperCase() }), el('small', { text: 'GOSTI' }))),
+    el('div', { class: 'stitch-home-match-bottom' }, el('span', { text: `⌖ ${event.venue}` }), link(availability(event) ? `VSTOPNICE OD ${euro.format(Math.min(...typesFor(event).filter((type) => type.capacity > type.sold).map((type) => type.price)))}` : 'RAZPRODANO', `/vstopnice/${event.slug}`, availability(event) ? 'button primary stitch-home-card-cta' : 'unavailable'))
+  );
+  shell(
+    el('section', { class: 'stitch-home-hero' },
+      el('div', { class: 'stitch-home-badges' }, el('span', { text: featured.competition }), el('span', { class: 'stitch-home-occupancy', text: `${occupied}% ZASEDENO` })),
+      el('h1', { text: `PREKMURSKI DERBI: ND BELTINCI VS ${featured.opponent.toUpperCase()}` }),
+      el('div', { class: 'stitch-home-teams' }, el('div', {}, crest(), el('strong', { text: 'ND BELTINCI' }), el('small', { text: 'DOMAČI' })), el('i', { text: 'VS' }), el('div', {}, clubCrest(featured.opponent, 'stitch-home-away-mark'), el('strong', { text: featured.opponent.toUpperCase() }), el('small', { text: 'GOSTI' }))),
+      el('div', { class: 'stitch-home-meta' }, el('div', {}, el('span', { text: '▣ TERMIN' }), el('strong', { text: shortDate })), el('div', {}, el('span', { text: '⌖ PRIZORIŠČE' }), el('strong', { text: featured.venue.toUpperCase() }))),
+      el('div', { class: 'stitch-home-progress' }, el('div', {}, el('span', { text: 'Zasedenost tribune' }), el('b', { text: `${capacity(featured) - availability(featured)} / ${capacity(featured)} MEST` })), el('i', { class: `share-${Math.round(occupied / 10) * 10}` })),
+      link(`KUPI VSTOPNICE (ŽE OD ${euro.format(Math.min(...typesFor(featured).map((type) => type.price)))})`, `/vstopnice/${featured.slug}`, 'button primary stitch-home-primary')
+    ),
+    el('section', { class: 'stitch-home-section' }, el('div', { class: 'stitch-home-section-heading' }, el('i', { 'aria-hidden': 'true' }), el('h2', { text: 'PRIHAJAJOČE TEKME' }), el('span', { text: '2. SNL 2026/27' })), upcoming.slice(0, 2).map(matchCard)),
+    el('section', { class: 'stitch-season-section' }, el('div', { class: 'stitch-home-section-heading' }, el('i', { 'aria-hidden': 'true' }), el('h2', { text: 'SEZONSKE VSTOPNICE' })), el('div', { class: 'stitch-season-card' }, el('div', { class: 'stitch-season-card-top' }, el('span', { text: 'ŽUTI PAKET ZVESTOBE 2026/27' }), el('div', {}, el('strong', { text: '95,00 €' }), el('small', { text: 'ENKRATNO PLAČILO' }))), el('h2', { text: 'CELOSEZONSKA KLUBSKA KARTICA' }), el('p', { text: 'Zagotovite si stalni sedež za vse domače tekme.' }), link('NAROČI SEZONSKI PAKET', '/sezonske', 'button primary stitch-home-primary'))),
+  );
+}
 function seasons() { shell(el('section', { class: 'season-hero' }, el('span', { class: 'eyebrow yellow', text: 'SEZONSKA VSTOPNICA' }), el('h1', { text: 'V vseh domačih trenutkih skupaj.' }), el('p', { text: 'Sezonske vstopnice so del demonstracijskega sistema.' }), el('strong', { text: '120,00 €' }))); }
 /* Reference purchase structure is supplied through the existing functional event page while its shared reference CSS is refined. */
-async function route() { try { const path = location.pathname; if (path === '/') return await home(); if (path === '/vstopnice') return await allMatches(); if (path.startsWith('/vstopnice/')) return await eventPage(path.split('/').pop()); if (path === '/kosarica') return await cartPage(); if (path === '/checkout' || path === '/blagajna') return await checkout(); if (path.startsWith('/placilo/')) return await payment(path.split('/').pop()); if (path === '/nakup/uspesen') return await success(); if (path === '/moje-vstopnice') return await myTickets(); if (path.startsWith('/vstopnica/')) return await ticketPage(path.split('/').pop()); if (path === '/sezonske') return seasons(); return await home(); } catch (error) { errorPage(error); } }
+async function route() { try { const path = location.pathname; if (path === '/') return await stitchHome(); if (path.startsWith('/vstopnice/')) return await eventPage(path.split('/').pop()); if (path === '/kosarica') return await cartPage(); if (path === '/checkout' || path === '/blagajna') return await checkout(); if (path.startsWith('/placilo/')) return await payment(path.split('/').pop()); if (path === '/nakup/uspesen') return await success(); if (path === '/moje-vstopnice') return await myTickets(); if (path.startsWith('/vstopnica/')) return await ticketPage(path.split('/').pop()); if (path === '/sezonske') return seasons(); return await stitchHome(); } catch (error) { errorPage(error); } }
 route();
