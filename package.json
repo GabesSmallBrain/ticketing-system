@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "start": "node dist/server.js",
-    "build": "rm -rf dist && tsc -p tsconfig.build.json && cp -R src/web dist/web",
+    "build": "rm -rf dist && tsc -p tsconfig.build.json && cp -R src/web dist/web && node scripts/build-manifest.mjs",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test tests/**/*.test.ts",
     "test:e2e": "playwright test",
