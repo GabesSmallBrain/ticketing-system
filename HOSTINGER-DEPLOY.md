@@ -6,20 +6,19 @@ production datastore.
 
 In Hostinger hPanel, create a **Node.js Web App** (not a static website/Website Builder entry) and upload this archive or connect its contents to a Git repository. Attach the intended hostname to that Node.js app; a static Hostinger site cannot serve this application's API or direct-route fallback.
 
-## Canonical method — upload the prebuilt package
+## Canonical method — Git-connected deployment
 
-From the repository root run `npm run build`, then upload the fresh
-`nd-beltinci-hostinger-upload-YYYY-MM-DD.zip` produced for that build. Extract
-it so its top-level files (`package.json`, `dist/`, `src/`, `sql/`) sit directly
-in the Hostinger Node application root. Do not extract into an extra nested
-directory and do not reuse the historical archive.
+Connect the Hostinger Node application to this repository and deploy the chosen
+branch through hPanel. The canonical pipeline is: Git push → Hostinger checkout
+→ `npm install` → `npm run build` → `npm run start`. The build creates the
+complete `dist/web` static tree and production `dist/server.js` serves it.
 
 In hPanel configure:
 
 ```text
 Node.js: 22.x
-Install command: npm install --omit=dev
-Build command: leave empty for the prebuilt package
+Install command: npm install
+Build command: npm run build
 Build command: npm run build
 Start command: npm run start
 Entry file: dist/server.js
@@ -37,9 +36,8 @@ Run `npm run db:migrate` exactly once against the production database, then run
 `BOOTSTRAP_CLUB_ID` environment values. Remove those bootstrap values after a
 successful run. There is no public staff registration path.
 
-Option B (source/Git deployment) is supported only when hPanel runs `npm ci`
-followed by `npm run build` before `npm run start`; it is not the recommended
-method because it is easier to accidentally mix source and build artifacts.
+Manual ZIP deployment is a fallback only. It must contain a freshly generated
+`dist/` tree and is never the source of truth for the Git-connected app.
 
 `npm run build` creates one coherent production artifact: `dist/` contains the
 compiled Node server and a complete copied `dist/web/` static tree. Upload the

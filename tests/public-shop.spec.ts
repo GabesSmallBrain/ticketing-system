@@ -47,8 +47,11 @@ test('public header exposes the staff login without exposing staff controls', as
   await expect(page.getByRole('link', { name: 'PRIJAVA ZA OSEBJE' }).first()).toHaveAttribute('href', '/prijava-za-osebje');
   await page.getByRole('link', { name: 'PRIJAVA ZA OSEBJE' }).first().click();
   await expect(page).toHaveURL('/prijava-za-osebje');
-  await expect(page.getByRole('heading', { name: 'KDO STE?' })).toBeVisible();
-  await expect(page.getByRole('button', { name: /ADMINISTRATOR/ })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'PRIJAVA ZA OSEBJE' })).toBeVisible();
+  await expect(page.getByRole('textbox', { name: 'E-POŠTA' })).toBeVisible();
+  await expect(page.getByLabel('GESLO', { exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'PRIJAVA' })).toBeVisible();
+  await expect(page.getByRole('button', { name: /ADMINISTRATOR/ })).toHaveCount(0);
 });
 
 test('public shop remains within the viewport across supported widths', async ({ page }) => {

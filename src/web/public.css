@@ -89,3 +89,311 @@ body:has(.stitch-cart-layout){background:#060b14}body:has(.stitch-cart-layout) .
   body.stitch-ticket-selection .stitch-select-ticket.is-selected .stitch-select-ticket-head span { background:#1f3b66; color:#e6efff; }
   body.stitch-ticket-selection .stitch-select-checkout { z-index:20; }
 }
+
+/* Stitch 03 checkout: the application keeps checkout separate from the cart,
+   so this is the reference's payment/customer portion in a normal-flow route. */
+body.stitch-checkout { background:#060b14; color:#eaf1fb; }
+body.stitch-checkout .shop-main { max-width:1180px; padding:34px 24px 72px; }
+body.stitch-checkout .shop-footer { border-color:#22334d; background:#060b14; color:#aebdd0; }
+body.stitch-checkout .shop-footer a { color:#ffd21f; }
+.stitch-checkout-intro { display:grid; grid-template-columns:46px minmax(0,1fr); align-items:center; gap:13px; margin-bottom:27px; }
+.stitch-checkout-intro h1 { margin:4px 0 0; color:#fff; font:900 39px/1 "Barlow Condensed","Arial Narrow",sans-serif; letter-spacing:.03em; }
+.stitch-checkout-back { display:grid; width:46px; height:46px; place-items:center; border:1px solid #344964; border-radius:12px; color:#fff; font:33px/1 sans-serif; text-decoration:none; }
+.stitch-checkout-back:hover { border-color:#ffd21f; color:#ffd21f; }
+.stitch-checkout-layout { display:grid; grid-template-columns:minmax(0,1.55fr) minmax(310px,.78fr); align-items:start; gap:32px; }
+.stitch-checkout-form { display:grid; min-width:0; gap:20px; }
+.stitch-checkout-section,.stitch-checkout-summary { min-width:0; border:1px solid #2a405e; border-radius:17px; background:#101d33; box-shadow:0 10px 24px #0002; }
+.stitch-checkout-section { padding:25px; }
+.stitch-checkout-section-head { display:grid; grid-template-columns:29px minmax(0,1fr); align-items:start; gap:11px; padding-bottom:19px; border-bottom:1px solid #263b59; }
+.stitch-checkout-step { display:grid; width:25px; height:25px; place-items:center; border-radius:50%; background:#ffd21f; color:#071226; font:900 14px/1 "Barlow Condensed",sans-serif; }
+.stitch-checkout-section h2 { margin:0; color:#fff; font:800 25px/1 "Barlow Condensed","Arial Narrow",sans-serif; letter-spacing:.03em; }
+.stitch-checkout-section-head p { margin:5px 0 0; color:#aebdd0; font-size:13px; line-height:1.4; }
+.stitch-checkout-fields { display:grid; gap:17px; margin-top:20px; }
+.stitch-checkout-field { display:grid; min-width:0; gap:8px; color:#dce7f7; font:800 13px/1 "Barlow Condensed","Arial Narrow",sans-serif; letter-spacing:.06em; text-transform:uppercase; }
+.stitch-checkout-field input { width:100%; min-width:0; height:52px; padding:0 14px; border:1px solid #334a6b; border-radius:11px; outline:0; background:#081426; color:#fff; font:500 16px/1 "Work Sans",Arial,sans-serif; text-transform:none; letter-spacing:normal; }
+.stitch-checkout-field input:focus { border-color:#ffd21f; box-shadow:0 0 0 3px #ffd21f2b; }
+.stitch-checkout-field input[aria-invalid] { border-color:#ff6971; box-shadow:0 0 0 2px #ff697126; }
+.stitch-field-error,.stitch-checkout-error { color:#ff9aa0; font:600 13px/1.35 "Work Sans",Arial,sans-serif; letter-spacing:0; text-transform:none; }
+.stitch-field-error[hidden],.stitch-checkout-error[hidden] { display:none!important; }
+.stitch-checkout-error { display:block; margin:0; padding:12px 13px; border:1px solid #9a4350; border-radius:9px; background:#451c27; }
+.stitch-checkout-method { display:grid; grid-template-columns:31px minmax(0,1fr); align-items:start; gap:12px; margin-top:20px; padding:17px; border:2px solid #ffd21f; border-radius:13px; background:#172740; }
+.stitch-checkout-method-mark { display:grid; width:22px; height:22px; place-items:center; border-radius:50%; background:#ffd21f; color:#071226; font:900 14px/1 Arial,sans-serif; }
+.stitch-checkout-method strong { display:block; color:#fff; font:800 18px/1 "Barlow Condensed","Arial Narrow",sans-serif; letter-spacing:.04em; }
+.stitch-checkout-method small { display:block; margin-top:5px; color:#c4d1e3; font-size:13px; line-height:1.4; }
+.stitch-checkout-summary { position:sticky; top:83px; display:grid; gap:20px; padding:24px; background:#18253d; }
+.stitch-checkout-crests { display:flex; flex:0 0 auto; align-items:center; gap:7px; }
+.stitch-checkout-crests .shop-crest,.stitch-checkout-crest { width:40px; height:40px; object-fit:contain; }
+.stitch-checkout-match { display:flex; align-items:flex-start; gap:13px; min-width:0; padding-bottom:19px; border-bottom:1px solid #2a405e; }
+.stitch-checkout-match>div:last-child { display:grid; min-width:0; gap:5px; }
+.stitch-checkout-match strong { color:#fff; font:800 21px/1 "Barlow Condensed","Arial Narrow",sans-serif; overflow-wrap:anywhere; }
+.stitch-checkout-match small { color:#aebdd0; font-size:12px; line-height:1.4; }
+.stitch-checkout-items { display:grid; gap:12px; }
+.stitch-checkout-items>div { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:baseline; gap:13px; color:#d6e0ef; font-size:13px; line-height:1.35; }
+.stitch-checkout-items span { min-width:0; }
+.stitch-checkout-items strong { color:#fff; white-space:nowrap; font:800 18px/1 "Barlow Condensed","Arial Narrow",sans-serif; }
+.stitch-checkout-total { display:grid; gap:5px; padding-top:18px; border-top:1px solid #2a405e; }
+.stitch-checkout-total span { color:#aebdd0; font:800 13px/1 "Barlow Condensed","Arial Narrow",sans-serif; letter-spacing:.07em; }
+.stitch-checkout-total strong { color:#ffd21f; font:900 37px/1 "Barlow Condensed","Arial Narrow",sans-serif; white-space:nowrap; }
+.stitch-checkout-pay { min-height:58px; padding:10px 14px; border-radius:13px; color:#071226; font:800 15px/1 "Barlow Condensed","Arial Narrow",sans-serif; letter-spacing:.04em; white-space:nowrap; }
+.stitch-checkout-empty { max-width:550px; margin:60px auto; padding:42px 28px; border:1px solid #2a405e; border-radius:18px; background:#101d33; color:#fff; text-align:center; }
+.stitch-checkout-empty h1 { margin:10px 0; color:#fff; font-size:40px; }
+.stitch-checkout-empty p { margin:0 0 24px; color:#b9c7d9; line-height:1.5; }
+
+@media (max-width:760px) {
+  body.stitch-checkout .shop-header { display:block; height:65px; border-bottom:1px solid #263b59; background:#071226; }
+  body.stitch-checkout .shop-header-inner { padding:0 16px; }
+  body.stitch-checkout .shop-brand { min-width:0; }
+  body.stitch-checkout .shop-brand strong { font-size:17px; }
+  body.stitch-checkout .shop-nav,body.stitch-checkout .staff-login-link,body.stitch-checkout .shop-footer { display:none; }
+  body.stitch-checkout .shop-main { max-width:544px; padding:19px 16px 48px; }
+  .stitch-checkout-intro { margin-bottom:20px; }
+  .stitch-checkout-intro h1 { font-size:31px; }
+  .stitch-checkout-layout { grid-template-columns:minmax(0,1fr); gap:20px; }
+  .stitch-checkout-form { gap:20px; }
+  .stitch-checkout-section { padding:20px 17px; border-radius:16px; }
+  .stitch-checkout-section h2 { font-size:23px; }
+  .stitch-checkout-section-head { padding-bottom:16px; }
+  .stitch-checkout-section-head p { font-size:12px; }
+  .stitch-checkout-fields { gap:16px; margin-top:18px; }
+  .stitch-checkout-field input { height:53px; }
+  .stitch-checkout-method { margin-top:18px; padding:16px; }
+  .stitch-checkout-summary { position:static; gap:17px; padding:20px 17px; border-radius:16px; }
+  .stitch-checkout-match { padding-bottom:17px; }
+  .stitch-checkout-crests .shop-crest,.stitch-checkout-crest { width:38px; height:38px; }
+  .stitch-checkout-match strong { font-size:20px; }
+  .stitch-checkout-total strong { font-size:35px; }
+  .stitch-checkout-pay { min-height:59px; font-size:15px; }
+  .stitch-checkout-empty { margin:32px auto; padding:34px 20px; }
+  .stitch-checkout-empty h1 { font-size:34px; }
+}
+
+@media (max-width:390px) {
+  body.stitch-checkout .shop-main { padding-left:14px; padding-right:14px; }
+  .stitch-checkout-section,.stitch-checkout-summary { padding-left:15px; padding-right:15px; }
+  .stitch-checkout-pay { font-size:14px; letter-spacing:.025em; }
+}
+
+/* Purchase confirmation derives its hierarchy from Stitch 03 checkout and
+   Stitch 04's real-ticket language without claiming unsupported delivery. */
+body.stitch-purchase-success { background:#060b14; color:#eaf1fb; }
+body.stitch-purchase-success .shop-main { max-width:920px; padding:46px 24px 76px; }
+body.stitch-purchase-success .shop-footer { border-color:#22334d; background:#060b14; color:#aebdd0; }
+body.stitch-purchase-success .shop-footer a { color:#ffd21f; }
+.stitch-success-page { display:grid; max-width:700px; margin:0 auto; gap:28px; }
+.stitch-success-hero { display:grid; justify-items:center; gap:10px; text-align:center; }
+.stitch-success-mark { display:grid; width:66px; height:66px; place-items:center; border:1px solid #21bc86; border-radius:50%; background:#0b3c33; box-shadow:0 0 0 8px #00e58c12; color:#00e58c; font:900 38px/1 Arial,sans-serif; }
+.stitch-success-hero .eyebrow { color:#00e58c; }
+.stitch-success-hero h1 { margin:0; color:#fff; font:900 46px/.95 "Barlow Condensed","Arial Narrow",sans-serif; letter-spacing:.035em; }
+.stitch-success-hero p { max-width:440px; margin:0; color:#b9c8da; font-size:15px; line-height:1.5; }
+.stitch-success-card { display:grid; gap:20px; padding:25px; border:1px solid #2a405e; border-radius:18px; background:#101d33; box-shadow:0 14px 30px #0003; }
+.stitch-success-match { display:flex; align-items:flex-start; gap:15px; min-width:0; padding-bottom:20px; border-bottom:1px solid #2a405e; }
+.stitch-success-crests { display:flex; flex:0 0 auto; align-items:center; gap:8px; }
+.stitch-success-crests .shop-crest,.stitch-success-crest { width:45px; height:45px; object-fit:contain; }
+.stitch-success-match>div:last-child { display:grid; min-width:0; gap:5px; }
+.stitch-success-match strong { color:#fff; font:800 25px/1 "Barlow Condensed","Arial Narrow",sans-serif; overflow-wrap:anywhere; }
+.stitch-success-match small { color:#aebdd0; font-size:13px; line-height:1.45; }
+.stitch-success-summary-head { display:flex; align-items:baseline; justify-content:space-between; gap:18px; }
+.stitch-success-summary-head span { color:#dce8f6; font:800 15px/1 "Barlow Condensed","Arial Narrow",sans-serif; letter-spacing:.07em; }
+.stitch-success-summary-head strong { flex:0 0 auto; color:#ffd21f; font:900 35px/1 "Barlow Condensed","Arial Narrow",sans-serif; white-space:nowrap; }
+.stitch-success-items { display:grid; gap:10px; padding:17px 0; border-top:1px solid #2a405e; border-bottom:1px solid #2a405e; }
+.stitch-success-items>div { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:baseline; gap:14px; color:#c8d4e4; font-size:14px; line-height:1.35; }
+.stitch-success-items span { min-width:0; }
+.stitch-success-items strong { color:#fff; white-space:nowrap; font:800 17px/1 "Barlow Condensed","Arial Narrow",sans-serif; }
+.stitch-success-primary { min-height:59px; border-radius:13px; font:800 17px/1 "Barlow Condensed","Arial Narrow",sans-serif; letter-spacing:.05em; }
+.stitch-success-secondary { min-height:49px; border-color:#3a506f; border-radius:12px; background:transparent; color:#dce8f6; font-size:14px; }
+.stitch-success-reference { display:grid; justify-items:center; gap:6px; padding-top:2px; color:#8fa0b8; text-align:center; }
+.stitch-success-reference span { font:800 11px/1 "Barlow Condensed","Arial Narrow",sans-serif; letter-spacing:.09em; }
+.stitch-success-reference code { color:#d5dfeb; font:700 13px/1.3 "JetBrains Mono",monospace; overflow-wrap:anywhere; }
+.stitch-success-unavailable { max-width:560px; margin:62px auto; padding:42px 28px; border:1px solid #2a405e; border-radius:18px; background:#101d33; color:#fff; text-align:center; }
+.stitch-success-unavailable h1 { margin:10px 0; font-size:40px; }
+.stitch-success-unavailable p { margin:0 0 25px; color:#b9c7d9; line-height:1.5; }
+
+@media (max-width:760px) {
+  body.stitch-purchase-success .shop-header { display:block; height:65px; border-bottom:1px solid #263b59; background:#071226; }
+  body.stitch-purchase-success .shop-header-inner { padding:0 16px; }
+  body.stitch-purchase-success .shop-brand { min-width:0; }
+  body.stitch-purchase-success .shop-brand strong { font-size:17px; }
+  body.stitch-purchase-success .shop-nav,body.stitch-purchase-success .staff-login-link,body.stitch-purchase-success .shop-footer { display:none; }
+  body.stitch-purchase-success .shop-main { max-width:544px; padding:31px 16px 50px; }
+  .stitch-success-page { gap:23px; }
+  .stitch-success-mark { width:61px; height:61px; font-size:35px; }
+  .stitch-success-hero h1 { font-size:39px; }
+  .stitch-success-hero p { font-size:14px; }
+  .stitch-success-card { gap:18px; padding:20px 17px; border-radius:17px; }
+  .stitch-success-match { gap:12px; padding-bottom:17px; }
+  .stitch-success-crests .shop-crest,.stitch-success-crest { width:40px; height:40px; }
+  .stitch-success-match strong { font-size:22px; }
+  .stitch-success-match small { font-size:12px; }
+  .stitch-success-summary-head strong { font-size:33px; }
+  .stitch-success-primary { min-height:59px; }
+  .stitch-success-unavailable { margin:34px auto; padding:34px 20px; }
+  .stitch-success-unavailable h1 { font-size:34px; }
+}
+
+@media (max-width:390px) {
+  body.stitch-purchase-success .shop-main { padding-left:14px; padding-right:14px; }
+  .stitch-success-card { padding-left:15px; padding-right:15px; }
+  .stitch-success-hero h1 { font-size:36px; }
+  .stitch-success-summary-head { align-items:flex-start; flex-direction:column; gap:7px; }
+}
+
+/* My Tickets borrows the match-card and voucher language of Stitch 04 without
+   implying customer accounts or cross-device ticket recovery. */
+body.stitch-my-tickets { background:#060b14; color:#eaf1fb; }
+body.stitch-my-tickets .shop-main { max-width:1160px; padding:45px 24px 76px; }
+body.stitch-my-tickets .shop-footer { border-color:#22334d; background:#060b14; color:#aebdd0; }
+body.stitch-my-tickets .shop-footer a { color:#ffd21f; }
+.stitch-wallet-intro { max-width:650px; margin-bottom:38px; }
+.stitch-wallet-intro h1 { margin:8px 0 10px; color:#fff; font:900 48px/.94 "Barlow Condensed","Arial Narrow",sans-serif; letter-spacing:.035em; }
+.stitch-wallet-intro p { max-width:480px; margin:0; color:#afc0d4; font-size:15px; line-height:1.5; }
+.stitch-wallet-sections { display:grid; gap:48px; }
+.stitch-wallet-section { display:grid; gap:20px; }
+.stitch-wallet-section-head { display:flex; align-items:center; gap:12px; }
+.stitch-wallet-section-head>span { display:grid; width:31px; height:25px; place-items:center; border:1px solid #355376; border-radius:999px; color:#ffd21f; font:800 11px/1 "JetBrains Mono",monospace; }
+.stitch-wallet-section-head h2 { margin:0; color:#fff; font:800 28px/1 "Barlow Condensed","Arial Narrow",sans-serif; letter-spacing:.035em; }
+.stitch-wallet-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:20px; }
+.stitch-wallet-card { display:grid; min-width:0; gap:19px; padding:23px; border:1px solid #2a405e; border-top:4px solid #ffd21f; border-radius:17px; background:#101d33; box-shadow:0 12px 28px #0002; }
+.stitch-wallet-card-top { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.stitch-wallet-count { min-width:0; color:#b9c9dc; font:800 12px/1 "Barlow Condensed","Arial Narrow",sans-serif; letter-spacing:.08em; text-align:right; }
+.stitch-wallet-match { display:flex; align-items:flex-start; gap:16px; min-width:0; padding-bottom:19px; border-bottom:1px solid #2a405e; }
+.stitch-wallet-crests { display:flex; flex:0 0 auto; align-items:center; gap:7px; padding-top:1px; }
+.stitch-wallet-crests .shop-crest,.stitch-wallet-crest { width:43px; height:43px; object-fit:contain; }
+.stitch-wallet-crests>span { color:#ffd21f; font:900 12px/1 "Barlow Condensed","Arial Narrow",sans-serif; }
+.stitch-wallet-match-copy { display:grid; min-width:0; gap:6px; }
+.stitch-wallet-match-copy h2 { margin:0; color:#fff; font:800 27px/.98 "Barlow Condensed","Arial Narrow",sans-serif; letter-spacing:.015em; overflow-wrap:anywhere; }
+.stitch-wallet-match-copy p { margin:0; color:#aebdd0; font-size:12px; line-height:1.45; }
+.stitch-wallet-items { display:grid; gap:10px; }
+.stitch-wallet-items>div { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:14px; align-items:baseline; color:#d5e0ef; font-size:14px; line-height:1.35; }
+.stitch-wallet-items span { min-width:0; }
+.stitch-wallet-items strong { color:#fff; white-space:nowrap; font:800 16px/1 "Barlow Condensed","Arial Narrow",sans-serif; }
+.stitch-wallet-action { min-height:54px; border-radius:12px; font:800 15px/1 "Barlow Condensed","Arial Narrow",sans-serif; letter-spacing:.05em; }
+.stitch-wallet-past { opacity:.72; }
+.stitch-wallet-past .stitch-wallet-card { border-top-color:#4e6b8a; box-shadow:none; }
+.stitch-wallet-past .stitch-wallet-action { border-color:#536b87; background:transparent; color:#d5e0ef; }
+.stitch-wallet-empty { display:grid; justify-items:center; max-width:570px; margin:72px auto; padding:44px 30px; border:1px solid #2a405e; border-radius:18px; background:#101d33; color:#fff; text-align:center; }
+.stitch-wallet-empty-mark { display:grid; width:56px; height:56px; place-items:center; border:1px solid #315372; border-radius:50%; background:#172b45; color:#ffd21f; font:900 30px/1 Arial,sans-serif; }
+.stitch-wallet-empty h2 { margin:18px 0 9px; font-size:37px; line-height:.95; }
+.stitch-wallet-empty p { max-width:410px; margin:0 0 25px; color:#b7c7d9; line-height:1.5; }
+
+@media (max-width:760px) {
+  body.stitch-my-tickets .shop-header { display:block; height:65px; border-bottom:1px solid #263b59; background:#071226; }
+  body.stitch-my-tickets .shop-header-inner { padding:0 16px; }
+  body.stitch-my-tickets .shop-brand { min-width:0; }
+  body.stitch-my-tickets .shop-brand strong { font-size:17px; }
+  body.stitch-my-tickets .shop-nav,body.stitch-my-tickets .staff-login-link,body.stitch-my-tickets .shop-footer { display:none; }
+  body.stitch-my-tickets .shop-main { max-width:598px; padding:31px 16px 50px; }
+  .stitch-wallet-intro { margin-bottom:29px; }
+  .stitch-wallet-intro h1 { font-size:40px; }
+  .stitch-wallet-intro p { font-size:14px; }
+  .stitch-wallet-sections { gap:37px; }
+  .stitch-wallet-section { gap:16px; }
+  .stitch-wallet-section-head h2 { font-size:25px; }
+  .stitch-wallet-grid { grid-template-columns:minmax(0,1fr); gap:16px; }
+  .stitch-wallet-card { gap:17px; padding:20px 17px; border-radius:16px; }
+  .stitch-wallet-match { gap:12px; padding-bottom:17px; }
+  .stitch-wallet-crests .shop-crest,.stitch-wallet-crest { width:40px; height:40px; }
+  .stitch-wallet-match-copy h2 { font-size:24px; }
+  .stitch-wallet-match-copy p { font-size:12px; }
+  .stitch-wallet-action { min-height:58px; }
+  .stitch-wallet-empty { margin:40px auto; padding:38px 21px; }
+  .stitch-wallet-empty h2 { font-size:33px; }
+}
+
+@media (max-width:390px) {
+  body.stitch-my-tickets .shop-main { padding-left:14px; padding-right:14px; }
+  .stitch-wallet-card { padding-left:15px; padding-right:15px; }
+  .stitch-wallet-match-copy h2 { font-size:23px; }
+}
+
+/* Season tickets are an intentionally non-purchasable presentation until the
+   season-pass domain exists. The credential-shaped card is never a QR ticket. */
+body.stitch-seasons { background:#060b14; color:#eaf1fb; }
+body.stitch-seasons .shop-main { max-width:1160px; padding:48px 24px 76px; }
+body.stitch-seasons .shop-footer { border-color:#22334d; background:#060b14; color:#aebdd0; }
+body.stitch-seasons .shop-footer a { color:#ffd21f; }
+.stitch-seasons-intro { max-width:650px; margin-bottom:37px; }
+.stitch-seasons-intro h1 { margin:8px 0 10px; color:#fff; font:900 50px/.93 "Barlow Condensed","Arial Narrow",sans-serif; letter-spacing:.035em; }
+.stitch-seasons-intro p { margin:0; color:#b5c6d9; font-size:16px; line-height:1.45; }
+.stitch-seasons-layout { display:grid; grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr); align-items:stretch; gap:28px; }
+.stitch-season-pass { position:relative; display:grid; min-width:0; min-height:410px; align-content:space-between; gap:30px; overflow:hidden; padding:29px; border:1px solid #566a83; border-radius:20px; background:linear-gradient(135deg,#1a3154 0%,#101d33 48%,#071226 100%); box-shadow:12px 14px 0 #020617,0 24px 45px #0005; color:#fff; }
+.stitch-season-pass:before { position:absolute; top:-115px; right:-84px; width:300px; height:300px; border:42px solid #ffd21f; border-radius:50%; content:""; opacity:.18; }
+.stitch-season-pass:after { position:absolute; right:0; bottom:0; left:0; height:5px; content:""; background:linear-gradient(90deg,#ffd21f,#f5b500,#2584c4); }
+.stitch-season-pass-glow { position:absolute; top:-80px; left:13%; width:55%; height:160px; border-radius:50%; background:#ffd21f22; filter:blur(35px); pointer-events:none; }
+.stitch-season-pass-top,.stitch-season-pass-copy,.stitch-season-price,.stitch-season-pass-note { position:relative; z-index:1; }
+.stitch-season-pass-top { display:flex; align-items:center; gap:14px; }
+.stitch-season-pass-top .shop-crest { width:58px; height:66px; flex:0 0 auto; background:transparent; clip-path:none; }
+.stitch-season-pass-top>div { display:grid; gap:3px; }
+.stitch-season-pass-top span { color:#cad9eb; font:800 12px/1 "JetBrains Mono",monospace; letter-spacing:.11em; }
+.stitch-season-pass-top strong { color:#fff; font:900 21px/1 "Barlow Condensed","Arial Narrow",sans-serif; letter-spacing:.07em; }
+.stitch-season-pass-copy { display:grid; max-width:430px; gap:10px; }
+.stitch-season-pass-copy h2 { margin:0; color:#fff; font:900 clamp(35px,5vw,57px)/.88 "Barlow Condensed","Arial Narrow",sans-serif; letter-spacing:.025em; }
+.stitch-season-pass-copy p { max-width:390px; margin:0; color:#d0dceb; font-size:15px; line-height:1.45; }
+.stitch-season-price { display:grid; justify-items:start; gap:5px; }
+.stitch-season-price span { color:#b9cae0; font:800 11px/1 "Barlow Condensed","Arial Narrow",sans-serif; letter-spacing:.1em; }
+.stitch-season-price strong { color:#ffd21f; font:900 48px/.9 "Barlow Condensed","Arial Narrow",sans-serif; letter-spacing:.02em; white-space:nowrap; }
+.stitch-season-pass-note { color:#a8bbd1; font:700 11px/1.35 "JetBrains Mono",monospace; }
+.stitch-season-info { display:grid; align-content:start; min-width:0; gap:19px; padding:28px; border:1px solid #2a405e; border-radius:18px; background:#101d33; box-shadow:0 12px 28px #0002; }
+.stitch-season-info .status { color:#ffcf8a; border:1px solid #8c5a18; background:#38270f; }
+.stitch-season-info h2 { margin:0; color:#fff; font:900 33px/.95 "Barlow Condensed","Arial Narrow",sans-serif; letter-spacing:.03em; }
+.stitch-season-info>p { margin:0; color:#b7c7d9; font-size:14px; line-height:1.55; }
+.stitch-season-detail { display:grid; gap:6px; padding-top:17px; border-top:1px solid #2a405e; }
+.stitch-season-detail span { color:#8fa5bf; font:800 11px/1 "Barlow Condensed","Arial Narrow",sans-serif; letter-spacing:.1em; }
+.stitch-season-detail strong { color:#e8f0fa; font:800 17px/1.14 "Barlow Condensed","Arial Narrow",sans-serif; letter-spacing:.035em; }
+.stitch-season-info .status.valid { color:#9bf4ca; border:1px solid #2f8c63; background:#103b30; }
+.stitch-season-quantity { display:flex; align-items:center; justify-content:space-between; gap:16px; padding-top:17px; border-top:1px solid #2a405e; }
+.stitch-season-quantity>span { color:#8fa5bf; font:800 11px/1 "Barlow Condensed","Arial Narrow",sans-serif; letter-spacing:.1em; }
+.stitch-season-quantity .stepper { gap:10px; }
+.stitch-season-quantity .step { width:43px; height:43px; border-color:#475f7e; border-radius:11px; background:#172a45; color:#fff; }
+.stitch-season-quantity .step:last-child { background:#ffd21f; border-color:#ffd21f; color:#071226; }
+.stitch-season-quantity output { min-width:24px; color:#ffd21f; font:900 23px/1 "Barlow Condensed","Arial Narrow",sans-serif; }
+.stitch-season-total strong { color:#ffd21f; font-size:31px; line-height:1; white-space:nowrap; }
+.stitch-season-action { min-height:58px; margin-top:7px; border-radius:13px; font:800 15px/1 "Barlow Condensed","Arial Narrow",sans-serif; letter-spacing:.05em; }
+.stitch-season-footnote { display:grid; max-width:670px; gap:9px; margin-top:48px; padding:24px 0 0; border-top:1px solid #263b59; }
+.stitch-season-footnote h2 { margin:0; color:#fff; font:800 27px/1 "Barlow Condensed","Arial Narrow",sans-serif; letter-spacing:.03em; }
+.stitch-season-footnote p { max-width:620px; margin:0; color:#aebfd3; font-size:14px; line-height:1.55; }
+
+@media (max-width:760px) {
+  body.stitch-seasons .shop-header { display:block; height:65px; border-bottom:1px solid #263b59; background:#071226; }
+  body.stitch-seasons .shop-header-inner { padding:0 16px; }
+  body.stitch-seasons .shop-brand { min-width:0; }
+  body.stitch-seasons .shop-brand strong { font-size:17px; }
+  body.stitch-seasons .shop-nav,body.stitch-seasons .staff-login-link,body.stitch-seasons .shop-footer { display:none; }
+  body.stitch-seasons .shop-main { max-width:598px; padding:31px 16px 50px; }
+  .stitch-seasons-intro { margin-bottom:28px; }
+  .stitch-seasons-intro h1 { font-size:41px; }
+  .stitch-seasons-intro p { font-size:14px; }
+  .stitch-seasons-layout { grid-template-columns:minmax(0,1fr); gap:21px; }
+  .stitch-season-pass { min-height:390px; gap:25px; padding:22px 18px; border-radius:18px; box-shadow:6px 7px 0 #020617,0 18px 32px #0004; }
+  .stitch-season-pass:before { top:-95px; right:-105px; width:250px; height:250px; border-width:34px; }
+  .stitch-season-pass-top .shop-crest { width:50px; height:57px; }
+  .stitch-season-pass-top strong { font-size:19px; }
+  .stitch-season-pass-copy h2 { font-size:38px; }
+  .stitch-season-pass-copy p { font-size:14px; }
+  .stitch-season-price strong { font-size:45px; }
+  .stitch-season-info { gap:18px; padding:21px 18px; border-radius:16px; }
+  .stitch-season-info h2 { font-size:30px; }
+  .stitch-season-action { min-height:59px; }
+  .stitch-season-footnote { margin-top:37px; padding-top:21px; }
+}
+
+@media (max-width:390px) {
+  body.stitch-seasons .shop-main { padding-left:14px; padding-right:14px; }
+  .stitch-season-pass { padding-left:16px; padding-right:16px; }
+  .stitch-season-pass-copy h2 { font-size:35px; }
+  .stitch-season-info { padding-left:16px; padding-right:16px; }
+}
+
+/* Season-product checkout, confirmation, and library entries reuse their
+   public route shells but deliberately avoid the match-ticket/QR semantics. */
+.stitch-season-checkout-product,.stitch-success-season-product,.stitch-wallet-season-product { display:flex; align-items:flex-start; gap:13px; min-width:0; padding-bottom:19px; border-bottom:1px solid #2a405e; }
+.stitch-season-checkout-product .shop-crest,.stitch-success-season-product .shop-crest,.stitch-wallet-season-product .shop-crest { flex:0 0 auto; width:42px; height:48px; object-fit:contain; background:transparent; clip-path:none; }
+.stitch-season-checkout-product>div,.stitch-success-season-product>div,.stitch-wallet-season-product>div { display:grid; min-width:0; gap:5px; }
+.stitch-season-checkout-product strong,.stitch-success-season-product strong { color:#fff; font:800 22px/1 "Barlow Condensed","Arial Narrow",sans-serif; letter-spacing:.04em; overflow-wrap:anywhere; }
+.stitch-season-checkout-product small,.stitch-success-season-product small { color:#aebdd0; font-size:13px; line-height:1.4; }
+.stitch-success-season-product { padding-bottom:20px; }
+.stitch-wallet-season-section .stitch-wallet-section-head>span { width:auto; padding:0 9px; }
+.stitch-wallet-season-card { display:grid; min-width:0; gap:18px; padding:22px; border:1px solid #a57f16; border-top:4px solid #ffd21f; border-radius:17px; background:linear-gradient(135deg,#172a45,#101d33); box-shadow:0 12px 28px #0002; }
+.stitch-wallet-season-product h2 { margin:0; color:#fff; font:800 26px/.98 "Barlow Condensed","Arial Narrow",sans-serif; letter-spacing:.02em; }
+.stitch-wallet-season-product p,.stitch-wallet-season-note { margin:0; color:#afc0d4; font-size:13px; line-height:1.45; }
+.stitch-wallet-season-note { padding-top:2px; font:700 11px/1.45 "JetBrains Mono",monospace; }
+@media(max-width:760px) { .stitch-season-checkout-product,.stitch-success-season-product,.stitch-wallet-season-product { gap:11px; padding-bottom:17px; } .stitch-wallet-season-card { padding:19px 17px; border-radius:16px; } }

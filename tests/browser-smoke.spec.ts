@@ -36,7 +36,7 @@ test('club_admin cookie grants dashboard and box-office access', async ({ page, 
   const response = await login(page, /ADMINISTRATOR/);
   expect(response.status()).toBe(200);
   const setCookie = (await response.allHeaders())['set-cookie'] || '';
-  expect(setCookie).toContain('ndb_demo_session=');
+  expect(setCookie).toContain('ndb_staff_session=');
   expect(setCookie).toContain('Path=/');
   expect(setCookie).toContain('HttpOnly');
   expect(setCookie).toContain('SameSite=Lax');
@@ -44,7 +44,7 @@ test('club_admin cookie grants dashboard and box-office access', async ({ page, 
   const state = await page.evaluate(() => fetch('/api/demo/session').then((response) => response.json()));
   expect(state).toMatchObject({ authenticated: true, role: 'club_admin', clubId: 'club_beltinci' });
   const cookies = await context.cookies();
-  expect(cookies.find((cookie) => cookie.name === 'ndb_demo_session')).toMatchObject({ httpOnly: true, sameSite: 'Lax', path: '/' });
+  expect(cookies.find((cookie) => cookie.name === 'ndb_staff_session')).toMatchObject({ httpOnly: true, sameSite: 'Lax', path: '/' });
   expect(await page.evaluate(() => fetch('/api/admin/dashboard').then((response) => response.status))).toBe(200);
   await page.goto('/admin/blagajna');
   await expect(page.getByRole('heading', { name: 'BELTINCI — NŠ MURA' })).toBeVisible();

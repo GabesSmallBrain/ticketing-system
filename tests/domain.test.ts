@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { CLUB, credential, issueTickets, redeem } from '../src/domain.js';
+import { CLUB, credential, issueSeasonPasses, issueTickets, redeem, type Order } from '../src/domain.js';
 import { seed } from '../src/db.js';
 
 test('a valid ticket is accepted once and then rejected atomically', async () => {
@@ -16,4 +16,12 @@ test('ticket issuance is idempotent for duplicated payment callback', () => {
 });
 test('a credential cannot cross a tenant boundary', () => {
   const db = seed(); const order = { id: 'o4', reference: 'NAR-TEST4', accessToken: 'access-4', paymentSecret: 'payment-4', clubId: CLUB, eventId: 'evt-mura', customer: { firstName: 'A', lastName: 'B', email: 'a@example.test' }, channel: 'ONLINE' as const, status: 'PAID' as const, amount: 15, createdAt: new Date().toISOString(), paymentStatus: 'SUCCEEDED' as const, items: [{ ticketTypeId: 'evt-mura-0', quantity: 1, price: 15 }] }; db.orders.push(order); const [ticket] = issueTickets(db, order); assert.equal(redeem(db, 'club_demo_fc', 'evt-mura', 'Vhod 1', ticket!.credential).result, 'invalid');
+});
+test('season passes are issued only after payment, once per purchased unit, and remain separate from match admission', () => {
+  const db = seed(); const product = db.seasonProducts[0]!;
+  const order: Order = { id: 'season-1', reference: 'SEZ-TEST', accessToken: 'access-season', paymentSecret: 'payment-season', clubId: CLUB, kind: 'SEASON', seasonProductId: product.id, seasonQuantity: 3, customer: { firstName: 'A', lastName: 'B', email: 'a@example.test' }, channel: 'ONLINE', status: 'PENDING_PAYMENT', amount: product.price * 3, createdAt: new Date().toISOString(), paymentStatus: 'PENDING', items: [] };
+  db.orders.push(order); assert.equal(issueSeasonPasses(db, order).length, 0); assert.equal(db.seasonPasses.length, 0);
+  order.status = 'PAID'; order.paymentStatus = 'SUCCEEDED'; const passes = issueSeasonPasses(db, order);
+  assert.equal(passes.length, 3); assert.equal(new Set(passes.map((pass) => pass.credential)).size, 3); assert.ok(passes.every((pass) => /^ndb_[A-Za-z0-9_-]{32}$/.test(pass.credential)));
+  assert.equal(issueSeasonPasses(db, order).length, 3); assert.equal(db.seasonPasses.length, 3); assert.equal(redeem(db, CLUB, 'evt-mura', 'Vhod 1', passes[0]!.credential).result, 'invalid');
 });
