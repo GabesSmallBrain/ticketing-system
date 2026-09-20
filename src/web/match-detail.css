@@ -1,0 +1,123 @@
+/* /admin/tekme/:id only — derived from the approved Stitch staff match language. */
+body:has(.match-detail-page){background:#060b14;color:#dae2fc}
+body:has(.match-detail-page) .nav{min-height:64px;background:#10192c;border-bottom:1px solid #1d2d49}
+body:has(.match-detail-page) .wrap{max-width:1181px;padding:28px 37px 68px}
+.match-detail-page{display:grid;gap:20px}
+.match-detail-back{width:max-content;color:#aebdd1;font:800 11px Inter,system-ui,sans-serif;letter-spacing:.07em;text-decoration:none}
+.match-detail-back:hover{color:#fff}
+.match-detail-hero{display:grid;gap:17px;padding:25px 27px;border:1px solid #1d2d49;border-radius:13px;background:linear-gradient(105deg,#101b2f,#142440)}
+.match-detail-tags{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.match-detail-tags>span{padding:5px 9px;border-radius:999px;background:#202d46;color:#bdc9da;font:800 9px Inter,system-ui,sans-serif;letter-spacing:.05em}
+.match-detail-status.open{background:#064b43!important;color:#00e58c!important}
+.match-detail-status.closed{background:#4b3422!important;color:#ffe177!important}
+.match-detail-identity{display:flex;align-items:center;gap:13px;min-width:0}
+.match-detail-crest{width:48px;height:48px;flex:none;object-fit:contain}
+.match-detail-crest.away{width:43px;height:43px}
+.match-detail-identity h1{display:grid;grid-template-columns:max-content max-content;gap:2px .22em;align-items:baseline;min-width:0;margin:0;color:#fff;font:900 clamp(40px,4.9vw,59px)/.86 "Barlow Condensed","Arial Narrow",sans-serif;letter-spacing:.015em;text-transform:uppercase}
+.match-detail-identity h1>span{display:flex;grid-column:1/-1;align-items:baseline;gap:.22em;white-space:nowrap}
+.match-detail-identity h1 b{font:inherit}
+.match-detail-identity h1 em{color:#fed400;font-style:normal}
+.match-detail-identity h1 strong{grid-column:1/-1;min-width:0;font:inherit;word-break:normal;overflow-wrap:normal;text-wrap:balance}
+.match-detail-meta{display:flex;gap:20px;flex-wrap:wrap;color:#b6c2d3;font-size:12px;font-weight:700}
+.match-detail-form{display:grid;gap:20px}
+.match-detail-layout{display:grid;grid-template-columns:1.08fr .92fr;gap:20px;align-items:start}
+.match-detail-card{overflow:hidden;border:1px solid #1d2d49;border-radius:12px;background:#101b2f}
+.match-detail-card>header{display:flex;align-items:center;gap:12px;min-height:75px;padding:17px 20px;border-bottom:1px solid #263650}
+.match-detail-card>header>span:first-child{display:grid;width:34px;height:34px;place-items:center;flex:none;border-radius:8px;background:#172b4b;color:#65a9ff;font:900 13px "Barlow Condensed","Arial Narrow",sans-serif}
+.match-detail-card>header>div{display:grid;gap:3px}
+.match-detail-card>header b{color:#fff;font:900 20px "Barlow Condensed","Arial Narrow",sans-serif;letter-spacing:.035em}
+.match-detail-card>header small{color:#8f9fba;font-size:10px}
+.match-sales>header .match-detail-status{margin-left:auto;padding:5px 8px;border-radius:999px;font:800 9px Inter,system-ui,sans-serif;letter-spacing:.04em}
+.match-detail-fields{display:grid;grid-template-columns:1fr 1fr;gap:17px;padding:21px}
+.match-information .match-detail-fields>.match-field:nth-child(-n+3){grid-column:1/-1}
+.match-sales .match-detail-fields>.match-field{grid-column:1/-1}
+.match-field,.ticket-category-controls>label{display:grid;gap:7px;min-width:0;color:#9cabc0;font:800 10px Inter,system-ui,sans-serif;letter-spacing:.055em}
+.match-field>span,.ticket-category-controls>label>span{color:#9cabc0}
+.match-field input,.match-field select,.ticket-category-controls input[type="number"]{width:100%;min-width:0;height:48px;padding:0 13px;border:1px solid #2a3d5e;border-radius:7px;background:#091426;color:#fff;font:700 14px Inter,system-ui,sans-serif;outline:none}
+.match-field input:focus,.match-field select:focus,.ticket-category-controls input:focus{border-color:#fed400;box-shadow:0 0 0 3px #fed40022}
+.match-field small,.ticket-category-controls label>small{color:#70819a;font-size:9px;font-weight:600;line-height:1.35;letter-spacing:0}
+.match-date-time{display:grid;grid-template-columns:1fr 1fr;gap:12px;grid-column:1/-1}
+.sales-safety-copy{margin:0 21px;padding:13px 14px;border-left:3px solid #65a9ff;background:#14233b;color:#b9c7d9;font-size:11px;line-height:1.45}
+.match-sales-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:17px 21px 21px}
+.match-sales-actions button{min-height:47px;font:900 14px "Barlow Condensed","Arial Narrow",sans-serif;letter-spacing:.055em}
+.match-sales-actions .secondary{background:#1269d3;border-color:#257de5}
+.match-stop-sales{border:1px solid #7a434a;background:#3d242d;color:#ffb4ba}
+.match-ticket-types{grid-column:1/-1}
+.ticket-category-list{display:grid;gap:12px;padding:20px}
+.ticket-category-editor{display:grid;grid-template-columns:minmax(190px,.72fr) 1.28fr;gap:18px;align-items:center;padding:18px;border:1px solid #273954;border-radius:9px;background:#152137}
+.ticket-category-editor>header{display:flex;align-items:center;justify-content:space-between;gap:13px;min-width:0}
+.ticket-category-editor>header>div:first-child{display:grid;gap:4px;min-width:0}
+.ticket-category-editor>header>div:first-child span{color:#fed400;font:800 9px Inter,system-ui,sans-serif;letter-spacing:.06em}
+.ticket-category-editor h3{margin:0;color:#fff;font:900 25px/.95 "Barlow Condensed","Arial Narrow",sans-serif}
+.ticket-category-facts{display:flex;gap:8px;flex-wrap:wrap}
+.ticket-category-facts span{padding:6px 8px;border-radius:6px;background:#0c1729;color:#8fa0b8;font:700 8px Inter,system-ui,sans-serif;letter-spacing:.04em;white-space:nowrap}
+.ticket-category-facts b{color:#fff;font-size:12px}
+.ticket-category-controls{display:grid;grid-template-columns:1fr 1fr minmax(175px,.9fr);gap:12px;align-items:start}
+.price-input{position:relative}
+.price-input input{padding-right:35px!important}
+.price-input b{position:absolute;right:13px;top:14px;color:#fed400;font-size:15px}
+.type-active{display:grid!important;grid-template-columns:22px 1fr;align-items:center;min-height:48px;padding:8px 11px;border:1px solid #2a3d5e;border-radius:7px;background:#091426;cursor:pointer}
+.type-active input{width:18px;height:18px;accent-color:#00e58c}
+.type-active>span{display:grid;gap:3px}
+.type-active b{color:#fff;font:800 10px Inter,system-ui,sans-serif}
+.type-active small{color:#71829a;font-size:8px;font-weight:600;letter-spacing:0}
+.ticket-capacity-error{min-height:12px;color:#ff9ba4!important;font-weight:700!important}
+.match-detail-savebar{display:grid;grid-template-columns:1fr minmax(230px,.7fr) 218px;gap:18px;align-items:center;min-height:86px;padding:17px 20px;border:1px solid #273954;border-radius:11px;background:#101b2f}
+.match-detail-savebar>div{display:grid;gap:4px}
+.match-detail-savebar strong{color:#fff;font:900 15px "Barlow Condensed","Arial Narrow",sans-serif;letter-spacing:.05em}
+.match-detail-savebar span{color:#8291a8;font-size:10px}
+.match-detail-save{min-height:51px;background:#fed400;border-color:#e4ba00;color:#231b00;font:900 17px "Barlow Condensed","Arial Narrow",sans-serif;letter-spacing:.065em}
+.match-detail-save:disabled{opacity:.65;cursor:wait}
+.match-detail-page .save-feedback{min-height:20px;margin:0;color:#aebdd1;font-size:11px;font-weight:800;text-align:right}
+.match-detail-page .save-feedback.success{color:#00e58c}
+.match-detail-page .save-feedback.error{color:#ff9ba4}
+.match-detail-state{min-height:470px;place-content:center;justify-items:start;padding:48px;border:1px solid #1d2d49;border-radius:13px;background:#101b2f}
+.match-detail-state>span{color:#fed400;font:800 10px Inter,system-ui,sans-serif;letter-spacing:.08em}
+.match-detail-state h1{margin:9px 0;color:#fff;font:900 48px/.92 "Barlow Condensed","Arial Narrow",sans-serif}
+.match-detail-state p{max-width:520px;margin:0 0 22px;color:#aebbd0;line-height:1.55}
+.match-detail-state a{text-decoration:none}
+.match-detail-state button{min-height:46px}
+@media(max-width:900px){
+  body:has(.match-detail-page) .wrap{padding-inline:24px}
+  .match-detail-layout{grid-template-columns:1fr}
+  .match-ticket-types{grid-column:auto}
+  .ticket-category-editor{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  body:has(.match-detail-page) .nav{display:flex;flex-wrap:wrap;gap:10px;padding:12px 18px}
+  body:has(.match-detail-page) .nav .links{display:flex;order:2;flex:1 0 100%;gap:5px;overflow-x:auto;padding-bottom:1px;scrollbar-width:none}
+  body:has(.match-detail-page) .nav .links::-webkit-scrollbar{display:none}
+  body:has(.match-detail-page) .nav .links a{flex:none;padding:8px 10px;border-radius:7px;color:#b9c8dd;font-size:12px;font-weight:800;white-space:nowrap}
+  body:has(.match-detail-page) .nav .links a.active{background:#1269d3;color:#fff}
+  body:has(.match-detail-page) .switch-role{display:block;margin-left:auto;padding:8px 10px;background:#1c2a42;color:#fff;font-size:11px}
+  body:has(.match-detail-page) .wrap{padding:22px 18px 52px}
+  .match-detail-page{gap:16px}
+  .match-detail-hero{padding:20px 18px}
+  .match-detail-identity{display:grid;grid-template-columns:35px minmax(0,1fr) 32px;gap:8px}
+  .match-detail-crest{width:35px;height:35px}
+  .match-detail-crest.away{width:32px;height:32px}
+  .match-detail-identity h1{display:contents}
+  .match-detail-identity h1>span{grid-column:2;grid-row:1;align-self:center;font:900 clamp(28px,7.7vw,34px)/.88 "Barlow Condensed","Arial Narrow",sans-serif}
+  .match-detail-identity h1>strong{grid-column:1/-1;grid-row:2;font:900 clamp(24px,6.4vw,29px)/.92 "Barlow Condensed","Arial Narrow",sans-serif;text-transform:uppercase}
+  .match-detail-meta{display:grid;gap:7px;font-size:11px}
+  .match-detail-card>header{padding:15px 16px}
+  .match-detail-card>header b{font-size:18px}
+  .match-detail-fields{grid-template-columns:1fr;padding:17px 16px}
+  .match-information .match-detail-fields>.match-field,.match-date-time{grid-column:1}
+  .match-date-time{grid-template-columns:1fr}
+  .sales-safety-copy{margin-inline:16px}
+  .match-sales-actions{grid-template-columns:1fr;padding:15px 16px 17px}
+  .match-sales-actions button{min-height:50px}
+  .ticket-category-list{padding:15px}
+  .ticket-category-editor{padding:15px}
+  .ticket-category-editor>header{align-items:flex-start}
+  .ticket-category-facts{justify-content:flex-end}
+  .ticket-category-controls{grid-template-columns:1fr}
+  .type-active{min-height:54px}
+  .match-detail-savebar{grid-template-columns:1fr;padding:16px}
+  .match-detail-savebar>div{display:none}
+  .match-detail-page .save-feedback{text-align:left}
+  .match-detail-save{min-height:54px}
+  .match-detail-state{min-height:390px;padding:32px 22px}
+  .match-detail-state h1{font-size:39px}
+}

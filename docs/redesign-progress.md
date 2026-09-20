@@ -134,17 +134,17 @@
 
 Status labels: `NOT STARTED`, `IN PROGRESS`, `REFERENCE MATCHED`, `INFERRED DESIGN COMPLETE`, `BLOCKED`.
 
-1. **POS `/admin/blagajna` — IN PROGRESS.** Full-bleed layout, catalogue/basket geometry, live ticket quantities and payment actions are rebuilt. Next: header/printer/cash affordances where supported, 1600×1432 comparison.
+1. **POS `/admin/blagajna` — VISUALLY APPROVED / LOCKED.** The native 1600×1432 reference drives the full-bleed match-day workflow; the post-sale state is separately regression-tested and passing. Printing remains truthfully unimplemented.
 2. **Public purchase `/vstopnice/:slug` — COMPLETE / REFERENCE MATCHED.** Iterations 4–7 added the real-data club/fixture hero split, real upcoming-event cards, stadium/sector grouping, and the measured 917px grid. Final reference viewport capture: `/tmp/ref02-implementation-v7.png`; diff: `/tmp/ref02-diff-v7.png`; AE 138525 / 8.67%. Measured geometry now matches the reference’s 29px gutters, 257px hero, 495px selector, 16px gutter, and 348px sticky basket. Remaining delta is limited to unavoidable real fixture/category data, the intentionally supporter-only public navigation, and font rasterization. Focused public regression: 4/4 passed. Next: Reference 03 digital ticket.
 3. **Digital ticket `/vstopnica/:id` — VISUALLY APPROVED / LOCKED.** Iterations 1–4 rebuilt the real-ticket voucher, QR quiet zone, data tiles, and right-hand status/details panels. Valid top-of-page capture: `/tmp/ref03-implementation-v4.png`; diff: `/tmp/ref03-diff-v4.png`; AE 169558 / 7.75%. The measured 1367px geometry is aligned: 85px header, x44/812 734px + 34px + 512px grid, y250 voucher/panel start, 110px band, QR at y762, and voucher bottom at y1280. Remaining visual differences are deliberately omitted mock wallet/gate/sponsor controls and public-only navigation, not a second fake operational system.
-4. **Mobile scanner `/scanner` — IN PROGRESS.** Reference mobile chrome CSS staged; preserve camera, parser, admission portal and confirm lock.
+4. **Mobile scanner `/scanner` — FUNCTIONAL / TECHNICAL VISUAL QA PASS.** Exact mobile reference language, real camera pipeline, blocking result lock, manual fallback, and admission regressions verified. Physical phone QA and user visual approval remain pending.
 5. **Admin dashboard `/admin` — IN PROGRESS (new Reference 05).** Iteration 1 implements its actual-data command panel, metric cards, sales channels, audit activity, gate-state truth/empty state, and operational notice. Capture remains environment-blocked.
-6. **Admin match list `/admin/tekme` — IN PROGRESS (new Reference 06).** Iteration 1 implements the management title, aggregate cards, filter strip, and dense real-data rows linked to the existing editor. Capture remains environment-blocked.
-7. **Admin ticket management `/admin/vstopnice` — IN PROGRESS (new Reference 08).** Iteration 1 rebuilds the route with real status/event/channel filtering, factual ticket state counters, dense state-coded records, authorized ticket detail links, and the existing cancellation confirmation flow. Capture remains environment-blocked.
-8. **Admin orders list `/admin/narocila` — BLOCKED (new Reference 07).** No route or authorized list API exists. `/narocilo/:id` remains an inferred detail route, not a reason to fabricate a dashboard.
+6. **Admin match list `/admin/tekme` — VISUALLY APPROVED / LOCKED (new Reference 06).** The management title, aggregate cards, filter strip, and real-data rows are approved and must remain unchanged.
+7. **Admin ticket management `/admin/vstopnice` — VISUALLY APPROVED / LOCKED (new Reference 08).** Exact-reference ticket records, operational filtering, safe cancellation, and admin-only transactional complimentary issuance are verified.
+8. **Admin orders list `/admin/narocila` — VISUALLY APPROVED / LOCKED (new Reference 07).** The final `Podrobnosti` control sizing refinement is verified at 1280/900/768/430/390px.
 9. Shared tokens/components — NOT STARTED.
 10. Public route model — `/` VISUALLY APPROVED / public ticket discovery; `/vstopnice` REDIRECTS TO `/`; `/vstopnice/:slug` is the next individual-selection visual target; `/kosarica`, `/checkout`, `/nakup/uspesen`, `/moje-vstopnice`, `/sezonske` NOT STARTED.
-11. Staff inferred routes `/prijava-za-osebje`, `/admin/tekme/:id`, `/admin/porocila`, `/narocilo/:id` — NOT STARTED.
+11. Staff inferred routes — `/admin/tekme/:id` and `/admin/porocila` VISUALLY APPROVED / LOCKED; `/prijava-za-osebje` pending visual approval; `/narocilo/:id` NOT STARTED.
 12. `/admin/osebje` — BLOCKED: no route, server API, or staff-domain model exists; do not fabricate it.
 13. Legacy visual sweep — NOT STARTED.
 14. Responsive/screenshot QA and full functional regression — NOT STARTED.
@@ -163,14 +163,15 @@ Status labels: `NOT STARTED`, `IN PROGRESS`, `REFERENCE MATCHED`, `INFERRED DESI
 | `/sezonske` | inferred public | PURCHASE IMPLEMENTED / VISUALLY APPROVED / LOCKED |
 | `/prijava-za-osebje` | Stitch `prijava_za_osebje_matchday_os` | FUNCTIONAL + TECHNICAL VISUAL QA PASS — USER VISUAL APPROVAL PENDING |
 | `/admin` | new Reference 05 | IN PROGRESS |
-| `/admin/tekme` | new Reference 06 | IN PROGRESS |
-| `/admin/tekme/:id` | inferred staff | NOT STARTED |
-| `/admin/blagajna` | old Reference 01 | IN PROGRESS |
-| `/admin/vstopnice` | new Reference 08 | IN PROGRESS |
-| `/admin/porocila` | inferred staff | NOT STARTED |
+| `/admin/tekme` | new Reference 06 | VISUALLY APPROVED / LOCKED |
+| `/admin/tekme/:id` | inferred from `administracija_tekme` + locked admin language | VISUALLY APPROVED / LOCKED |
+| `/admin/blagajna` | `fizi_na_blagajna_pos` (1600×1432) | VISUALLY APPROVED / LOCKED — POST-SALE WORKFLOW PASS |
+| `/admin/vstopnice` | `administracija_vstopnice` (1181×1600) | VISUALLY APPROVED / LOCKED |
+| `/admin/narocila` | `administracija_naro_ila` (1280×1773) | VISUALLY APPROVED / LOCKED |
+| `/admin/porocila` | locked staff design system; no exact Stitch report reference | VISUALLY APPROVED / LOCKED |
 | `/narocilo/:id` | inferred from new Reference 07 | NOT STARTED |
-| `/admin/narocila`, `/admin/osebje` | new Reference 07 / no application route | BLOCKED |
-| `/scanner` | old Reference 04 | IN PROGRESS |
+| `/admin/osebje` | no application route | BLOCKED |
+| `/scanner` | Stitch `mobilni_skener_vstopnic_vhod` (544×1600) | FUNCTIONAL + TECHNICAL VISUAL QA PASS — PHYSICAL PHONE QA / USER VISUAL APPROVAL PENDING |
 
 ## Stitch reference implementation matrix
 
@@ -181,10 +182,12 @@ Status labels: `NOT STARTED`, `IN PROGRESS`, `REFERENCE MATCHED`, `INFERRED DESI
 | `/kosarica` | `03_ko_arica_in_blagajna_mobilna` (348×1600) | PASS: session cart, bounded quantities, real totals, `/checkout` link | no direct desktop reference | TECHNICAL IMPLEMENTATION IN PROGRESS | 348px capture and browser interaction checked | User visual approval PENDING. Stop after cart only. |
 | `/vstopnica/:id` | `digitalna_vstopnica_in_qr_koda`, `04_digitalna_vstopnica_qr_mobilna` | PASS | VISUALLY APPROVED / LOCKED | VISUALLY APPROVED / LOCKED | existing ticket tests | preserve QR. |
 | `/prijava-za-osebje` | `prijava_za_osebje_matchday_os` | PASS (demo) | NOT STARTED | no mobile Stitch ref | not rechecked | visual-only adaptation. |
-| `/admin`, `/admin/tekme`, `/admin/vstopnice` | matching `administracija_*` references | PASS | IN PROGRESS | no mobile Stitch refs | captures exist | continue reference iteration. |
-| `/admin/blagajna` | `fizi_na_blagajna_pos` | PASS | IN PROGRESS | no mobile Stitch ref | POS tests | continue reference iteration. |
-| `/scanner` | `mobilni_skener_vstopnic_vhod` | PASS | no desktop Stitch ref | IN PROGRESS | scanner tests | preserve blocking dialog. |
-| `/admin/narocila` | `administracija_naro_ila` | BLOCKED | DESIGN AVAILABLE — FUNCTIONAL PREREQUISITE MISSING | same | n/a | authorized orders-list API required. |
+| `/admin`, `/admin/tekme` | matching `administracija_*` references | PASS | locked | responsive PASS | regression checked | preserve locked routes. |
+| `/admin/vstopnice` | `administracija_vstopnice` | PASS | VISUALLY APPROVED / LOCKED | VISUALLY APPROVED / LOCKED | 1181/900/768/430/390px + complimentary transactional QA PASS | Preserve unchanged; printing not implemented. |
+| `/admin/blagajna` | `fizi_na_blagajna_pos` | PASS | VISUALLY APPROVED / LOCKED | derived responsive composition PASS | 1600/900/768/430/390px + transactional post-sale QA PASS | Printing not implemented. |
+| `/scanner` | `mobilni_skener_vstopnic_vhod` | PASS | derived desktop PASS | PASS | 1280/430/390px + landscape + 10 focused scanner tests PASS | Physical phone QA and user visual approval PENDING. |
+| `/admin/narocila` | `administracija_naro_ila` | PASS | VISUALLY APPROVED / LOCKED | VISUALLY APPROVED / LOCKED | 1280/900/768/430/390px + final button sizing PASS | Preserve unchanged. |
+| `/admin/porocila` | locked staff design system | PASS | VISUALLY APPROVED / LOCKED | VISUALLY APPROVED / LOCKED | 1280/900/768/430/390px + reversible MariaDB consistency QA PASS | Preserve unchanged. |
 
 Reference-native screenshots are retained outside the repository under `/tmp`; source images remain in the supplied downloads directory and are not copied into application assets.
 
@@ -257,7 +260,8 @@ Reference-native screenshots are retained outside the repository under `/tmp`; s
 | Locked-route regression | PASS — staff login still loads and authentication/logout remain functional |
 | Tests | PASS — typecheck, unit tests, build, diff check, and focused authenticated browser smoke |
 | Known regression | NONE |
-| User visual approval | PENDING |
+| User visual approval | APPROVED |
+| Visual status | LOCKED |
 
 ### Refinement pass — 2026-09-18
 
@@ -267,9 +271,183 @@ Reference-native screenshots are retained outside the repository under `/tmp`; s
 | `Zadnje dejavnosti` dashboard UI/data projection | REMOVED |
 | Complimentary reporting model | Existing explicit `orders.channel = COMPLIMENTARY`; no price-based inference or migration required |
 | Current dashboard projection | 2 paid, 0 complimentary, 2 total issued, 4,998 remaining, €30.00 revenue |
-| Complimentary scanner regression | Not implemented: there is no complimentary issuance flow in this prototype yet |
+| Complimentary scanner regression | PASS — first scan accepted, second scan returned already_used through the canonical admission path |
 | NZS fixture research | Documented in `docs/nzs-integration.md`; manual review/import only, no scheduler or scraper |
 | Desktop / 390px / 430px browser QA | PASS — no horizontal overflow and no console errors |
+| User visual approval | APPROVED |
+| Visual status | LOCKED |
+
+### Final matchup typography pass — 2026-09-19
+
+| Check | Result |
+| --- | --- |
+| Two-row matchup hierarchy | PASS — tenant club name and `VS` share row 1; the complete opponent occupies row 2 |
+| Dynamic team data | PASS — home label derives from the event club ID and opponent uses `event.opponent`; existing home-event semantics are preserved |
+| Long opponent names | PASS — `NK Triglav Kranj`, `NK Tabor Sežana`, and `ND Ilirija 1911` each remain one complete second row |
+| Desktop / 390px / 430px browser QA | PASS — aligned rows, no horizontal overflow, no console errors |
+| Dashboard regression | PASS — statistics unchanged, complimentary reporting present, and `Zadnje dejavnosti` remains removed |
+| User visual approval | APPROVED |
+| Visual status | LOCKED |
+
+## `/admin/tekme` — match-management listing redesign, 2026-09-19
+
+| Check | Result |
+| --- | --- |
+| Reference | `administracija_tekme` (1181×1600) |
+| Functional | PASS — 7 MariaDB-backed matches load, filters distinguish 4 upcoming and 3 completed matches, and each management action targets its real event ID |
+| Authorization | PASS — club admin allowed; box-office and gate staff receive 403; unauthenticated access redirects to staff login; logout invalidates the session |
+| API/domain | PASS — no API, domain, or database changes; existing `/api/admin/events` contract retained |
+| Error/empty | PASS — deliberate Slovenian states; server/database details are not exposed |
+| Tests | PASS — syntax check, typecheck, 5/5 unit tests, build, diff check, and focused authenticated Playwright QA |
+| Desktop design | PASS — Stitch card composition reconstructed with real fields and unsupported reference controls omitted |
+| Mobile design | PASS — genuine cards, visible role-aware navigation, full-width edit action, readable two-row matchup |
+| Responsive QA | PASS — 1181px, 900px, 390px, and 430px; no overflow or browser-console errors |
+| Complimentary data | Total issued is displayed; no paid-revenue inference or hidden complimentary classification |
+| Known regression | NONE |
+| User visual approval | APPROVED |
+| Visual status | LOCKED |
+
+## `/admin/tekme/:id` — individual match editor redesign, 2026-09-19
+
+| Check | Result |
+| --- | --- |
+| Reference | Derived from `administracija_tekme` (1181×1600) and the locked `administracija_pregled` visual language; no exact Stitch editor exists |
+| Functional | PASS — existing editor flow retained for match details, sales window/state, categories, save, and stop-sales confirmation |
+| Authorization | PASS — club admin allowed; box-office and gate staff receive 403; unauthenticated access redirects to staff login |
+| API/domain | PASS — existing update endpoint retained; one MariaDB cutover regression repaired so online checkout transactionally honors `sales_open` |
+| MariaDB persistence | PASS — kickoff, venue, sales window, price, and capacity persisted after reload and a fresh Node process; fixture restored afterward |
+| Validation | PASS — capacity below issued count denied beside the affected category and MariaDB remained unchanged |
+| Error/empty | PASS — missing, unauthorized, load-error, and save-error states use safe Slovenian copy; edits remain visible after save failure |
+| Tests | PASS — syntax check, typecheck, 5/5 unit tests, build, diff check, security input-validation scan, and focused authenticated Playwright QA |
+| Desktop design | PASS — match identity, two aligned setup cards, structured category rows, and one primary save action |
+| Mobile design | PASS — one-column sections, full-width controls/actions, stacked category cards, and visible role-aware navigation |
+| Responsive QA | PASS — 1181px, 390px, and 430px; no overflow or browser-console errors; long club names remain intact |
+| Stop-sales regression | PASS — new online purchase denied; existing issued ticket admitted; QA admission and fixture changes restored |
+| Locked-route regression | PASS — `/admin`, `/admin/tekme`, and `/prijava-za-osebje` remain functional and visually unchanged |
+| Known regression | Unsaved-change navigation protection is not implemented |
+| User visual approval | APPROVED |
+| Visual status | LOCKED |
+
+## `/admin/blagajna` — physical box-office POS redesign, 2026-09-19
+
+| Check | Result |
+| --- | --- |
+| Reference | Exact Stitch `fizi_na_blagajna_pos` at native 1600×1432 |
+| Functional | PASS — match, category, bounded quantity, payment method, completion, clear/new sale, and sell-and-admit workflow retained |
+| Authorization | PASS — club admin and box-office allowed; gate staff and unauthenticated requests denied server-side |
+| API/domain | PASS — existing `/api/box-office` contract retained; no separate inventory or ticket model introduced |
+| MariaDB persistence | PASS — isolated cash and card sales persisted as PAID `BOX_OFFICE` orders with correct items, tickets, payment provider records, and seller identity |
+| Inventory | PASS — public event availability reflected both POS sales; authoritative transaction continued to enforce active category, quantity, capacity, and open sales |
+| Payment method | PASS — CASH and CARD persisted; card is explicitly described as confirmation on an external terminal; no card data collected |
+| Success/error | PASS — full-panel success summary, guarded duplicate submission, sold-out/closed/empty states, and sanitized operational failures |
+| Tests | PASS — syntax, typecheck, 5/5 unit tests, build, diff check, authenticated responsive QA, role checks, and reversible MariaDB sale/admission QA |
+| Desktop design | PASS — native Stitch catalogue/basket geometry reconstructed using real events, categories, availability, prices, and centralized crests |
+| Tablet design | PASS — intentional single-column workstation at 900px and 768px with full-size controls |
+| Mobile design | PASS — logical match/category/quantity/payment/total/action stack with touch targets at 430px and 390px |
+| Responsive QA | PASS — 1600px, 900px, 768px, 430px, and 390px; no horizontal page scrolling or console errors |
+| Printing | NOT IMPLEMENTED — no printer infrastructure exists; the POS exposes truthful issued-ticket and QR views only |
+| Sell + admit | PASS — admission recorded exactly once; subsequent scan returned `already_used` |
+| Known regression | NONE |
+| Main POS visual approval | APPROVED / UNCHANGED |
+| Visual status | LOCKED |
+| Post-sale workflow | PASS — authoritative order-line summary replaces active controls; server inventory is refetched before success is shown; new sale resets quantities, total, payment default, order/ticket result, errors, and admission result while preserving the match |
+| Post-sale regression | PASS — cash, external-terminal card, three-ticket/two-category sale, rapid repeat activation, second sale, sell-and-admit, final-ticket sold-out transition, refresh safety, and 1600/900/768/430/390px layouts verified |
+| Automated regression | `tests/box-office-post-sale.spec.ts` — 2/2 PASS |
+
+## `/admin/vstopnice` — ticket management and complimentary issuance, 2026-09-20
+
+| Check | Result |
+| --- | --- |
+| Reference | Exact Stitch `administracija_vstopnice` at native 1181×1600 |
+| Functional | PASS — real ticket list, reference search, status/event/channel/category filters, detail access, and confirmed cancellation |
+| Authorization | PASS — club admin may list, issue, and cancel; box-office, gate staff, and unauthenticated callers are denied admin endpoints |
+| API/domain | PASS — safe ticket-list projection omits credentials; complimentary issuance reuses canonical orders, items, tickets, credentials, scanner, cancellation, and audit trail |
+| MariaDB | PASS — two-ticket QA issue stored as PAID `COMPLIMENTARY`, amount/item value 0, no payment row, seller identity present, and normal secure tickets |
+| Paid tickets | PASS — ONLINE and BOX_OFFICE remain distinct; a genuine €0 box-office category remains BOX_OFFICE |
+| Complimentary issuance | PASS — explicit admin-only flow consumes shared capacity and contributes €0 revenue |
+| Capacity | PASS — issued count +2 and remaining -2; final-capacity complimentary vs box-office race produced one success and one rejection with sold equal to capacity |
+| Scanner | PASS — first complimentary scan accepted, duplicate returned already_used, exactly one admission row |
+| Cancellation | PASS — unused complimentary ticket persisted as CANCELLED and scanner returned cancelled; historical order/ticket retained during verification |
+| Error/empty | PASS — deliberate safe states; server/database details are not exposed |
+| Tests | PASS — syntax, typecheck, unit suite, build, diff check, focused Playwright, reversible MariaDB scenario, role checks, and scoped manual security review. The repository-wide Ruflo scan separately flags one pre-existing possible SQL-injection site in `src/scripts/migrate-mariadb.ts`; this route's new queries are parameterized. |
+| Desktop design | PASS — exact reference hierarchy and dense operational records using real data |
+| Tablet design | PASS — intentional three-column then card adaptation at 900px and 768px |
+| Mobile design | PASS — stacked ticket cards, full-width actions, compact filters and issuance dialog |
+| Responsive QA | PASS — 1181px, 900px, 768px, 430px, and 390px; no horizontal overflow or console errors |
+| Printing | NOT IMPLEMENTED — no print action or printer infrastructure added |
+| Known regression | NONE |
+| User visual approval | APPROVED / LOCKED |
+
+## `/admin/narocila` — operational order history, 2026-09-20
+
+| Check | Result |
+| --- | --- |
+| Reference | Exact Stitch `administracija_naro_ila` at native 1280×1773 |
+| Functional | PASS — newest-first history, safe reference search, compact channel/status/product filters, and lightweight operational detail disclosure |
+| Authorization | PASS — club admin allowed; box-office, gate staff, and unauthenticated callers denied server-side |
+| API/domain | PASS — tenant-scoped projection preserves separate order, payment, and ticket/entitlement facts |
+| MariaDB | PASS — real orders, items, payments, tickets, events, staff, season products, and entitlements drive the response |
+| Online orders | PASS — real ONLINE records show historical total and truthful demo-payment state |
+| Box-office orders | PASS — real BOX_OFFICE record shows channel, card method, ticket count, and human-readable seller |
+| Complimentary orders | PASS — reversible real issue showed COMPLIMENTARY, PAID, 0,00 €, NOT_REQUIRED payment, one issued ticket, and was fully removed after QA |
+| Season orders | PASS — real three-unit 2026/27 season order shows product, quantity, 360,00 €, and three entitlements without match metadata |
+| Financial display | PASS — totals use stored order amounts; complimentary remains 0,00 € |
+| Error/empty | PASS — deliberate Slovenian states; raw server and database details remain hidden |
+| Security | PASS — response omits access/payment secrets, hashes, credentials, session tokens, and internal staff IDs |
+| Tests | PASS — syntax, typecheck, unit suite, build, diff check, focused Playwright, authenticated browser QA, API role checks, and reversible MariaDB QA |
+| Desktop design | PASS — exact-reference hierarchy, metrics, compact filters, dense operational records |
+| Tablet design | PASS — intentional reduced record grid at 900px and 768px |
+| Mobile design | PASS — deliberate stacked order cards and single-column filters |
+| Responsive QA | PASS — 1280px, 900px, 768px, 430px, and 390px; no overflow or console errors |
+| Known regression | NONE |
+| User visual approval | APPROVED / LOCKED |
+
+Migration SQL scanner conclusion: `src/scripts/migrate-mariadb.ts` uses a fixed repository directory, strictly allow-listed migration filenames, parameterized migration-ledger queries, and is a CLI that is not exposed over HTTP. The scanner hit is trusted CLI migration-file execution, not runtime/user-controlled SQL injection; retain for the later security-hardening ledger without weakening the runner.
+
+## `/admin/porocila` — operational club reporting, 2026-09-20
+
+| Check | Result |
+| --- | --- |
+| Reference | No exact Stitch reports reference supplied; derived from the locked staff design system |
+| Functional | PASS — club totals, explicit channel breakdown, per-match rows, and compact match filter |
+| Authorization | PASS — club admin allowed; box-office, gate staff, and unauthenticated callers denied server-side |
+| MariaDB | PASS — events, orders, tickets, admissions, capacities, and season entitlements drive the projection |
+| Revenue | PASS — stored totals from PAID non-complimentary match orders plus preserved event baseline; pending/failed excluded |
+| Ticket counts | PASS — paid, complimentary, and total issued remain separate |
+| Complimentary | PASS — derived only from `orders.channel = COMPLIMENTARY`; reversible issue added one total/complimentary, €0 revenue, and consumed one place |
+| Admissions | PASS — real admission rows plus preserved event baseline; never inferred from issuance |
+| Channels | PASS — ONLINE, BOX_OFFICE, and COMPLIMENTARY only; €0 complimentary revenue |
+| Error/empty | PASS — deliberate safe states without raw database details |
+| Desktop | PASS — operational metric hierarchy, channel cards, and aligned match rows |
+| Tablet | PASS — intentional responsive grid at 900px and 768px |
+| Mobile | PASS — stacked metrics, channels, and match cards at 430px and 390px |
+| Tests | PASS — syntax, typecheck, unit suite, build, diff check, focused Playwright, role checks, responsive browser QA, and reversible MariaDB consistency QA |
+| User visual approval | APPROVED / LOCKED |
+
+Season reporting is deliberately separate: paid season-order revenue and issued entitlements are disclosed outside match totals, while season admission remains NOT IMPLEMENTED.
+
+## `/scanner` — match-day gate scanner, 2026-09-20
+
+| Check | Result |
+| --- | --- |
+| Functional | PASS — match/gate setup, camera start, decode, server validation, blocking confirmation, cooldown, and rearm |
+| Authorization | PASS — gate staff and club admin allowed; box-office and unauthenticated callers denied by current policy |
+| Camera | PASS in browser automation — environment-facing request, permission/error differentiation, no frame upload |
+| BarcodeDetector | PASS in supported-path automation |
+| jsQR fallback | PASS — a real application QR image decoded to its opaque credential and round-tripped through admission |
+| Manual fallback | PASS — canonical parser, same admission endpoint, and same result modal |
+| Atomic admission | PASS — MariaDB-backed first admission accepted and duplicate rejected |
+| Duplicate scan | PASS — one request while validation/result is locked; cooldown prevents immediate repeat and later intentional repeat returns already_used |
+| Complimentary | PASS — reversible real issue returned accepted then already_used |
+| Sell + admit | PASS — reversible admitted box-office sale returned already_used |
+| Network failure | PASS — distinct `TEŽAVA S POVEZAVO`; validity explicitly undetermined |
+| Result modal | PASS — body-level foreground portal, fixed maximum z-index, inert background, focus trap, no backdrop dismissal, and Escape suppressed |
+| Camera cleanup | PASS — tracks stop on scanner exit, pagehide, and background visibility change; foreground restart is explicit |
+| Desktop design | PASS — derived widened scanner composition; no desktop Stitch reference |
+| Mobile design | PASS — exact `mobilni_skener_vstopnic_vhod` visual language with large touch targets and safe-area spacing |
+| Responsive QA | PASS — 1280px, 430px, 390px, and 844×390 landscape; no overflow or console errors |
+| Automated tests | PASS — 10 focused Playwright scanner tests plus domain suite |
+| Physical phone QA | PENDING / NOT PHYSICALLY VERIFIED |
 | User visual approval | PENDING |
 
 ## Runtime database cutover ledger — 2026-09-18

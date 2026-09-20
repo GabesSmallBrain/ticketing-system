@@ -1,4 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
+import { maria } from '../src/mariadb.js';
+
+const issuedOrderIds: string[] = [];
 
 declare global {
   interface Window {
@@ -9,23 +12,51 @@ declare global {
 }
 
 async function login(page: Page, label: RegExp) {
-  await page.goto('/demo-login');
-  await page.getByRole('button', { name: label }).click();
+  const email = label.source.includes('BLAGAJNIK') ? 'blagajna@ndbeltinci.test' : label.source.includes('ADMINISTRATOR') ? 'admin@ndbeltinci.test' : 'vhod@ndbeltinci.test';
+  await page.request.post('/api/logout');
+  await page.goto('/prijava-za-osebje');
+  await page.fill('#staff-email', email);
+  await page.fill('#staff-password', 'BeltinciDev!2026');
+  await page.locator('form').evaluate((form: HTMLFormElement) => form.requestSubmit());
   await page.waitForURL(/\/(admin(?:\/blagajna)?|scanner)$/);
 }
 
 async function issueTicket(page: Page) {
   await login(page, /BLAGAJNIK/);
-  return page.evaluate(async () => {
+  const issued = await page.evaluate(async () => {
     const response = await fetch('/api/box-office', {
       method: 'POST', headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ eventId: 'evt-mura', ticketTypeId: 'evt-mura-0', quantity: 1, paymentMethod: 'CASH', admit: false })
     });
     return response.json();
   });
+  issuedOrderIds.push(issued.order.id);
+  return issued;
 }
 
+test.afterEach(async () => {
+  while (issuedOrderIds.length) {
+    const orderId = issuedOrderIds.pop()!;
+    const connection = await maria().getConnection();
+    try {
+      await connection.beginTransaction();
+      const [order] = await connection.query('SELECT reference FROM orders WHERE id=? FOR UPDATE', [orderId]);
+      const items = await connection.query('SELECT ticket_type_id,quantity FROM order_items WHERE order_id=?', [orderId]);
+      const tickets = await connection.query('SELECT id FROM tickets WHERE order_id=?', [orderId]);
+      for (const ticket of tickets) { await connection.query('DELETE FROM admission_attempts WHERE ticket_id=?', [ticket.id]); await connection.query('DELETE FROM admissions WHERE ticket_id=?', [ticket.id]); }
+      await connection.query('DELETE FROM tickets WHERE order_id=?', [orderId]);
+      await connection.query('DELETE FROM payments WHERE order_id=?', [orderId]);
+      await connection.query('DELETE FROM order_items WHERE order_id=?', [orderId]);
+      if (order) await connection.query('DELETE FROM audit_events WHERE detail=?', [order.reference]);
+      await connection.query('DELETE FROM orders WHERE id=?', [orderId]);
+      for (const item of items) if (item.ticket_type_id) await connection.query('UPDATE ticket_types SET sold=GREATEST(0,sold-?) WHERE id=?', [item.quantity, item.ticket_type_id]);
+      await connection.commit();
+    } catch (error) { await connection.rollback(); throw error; } finally { connection.release(); }
+  }
+});
+
 async function openScanner(page: Page) {
+  await page.locator('.scanner-setup select').selectOption('evt-mura');
   await page.getByRole('button', { name: 'VHOD 3 — TRIBUNA' }).click();
   await page.getByRole('button', { name: 'ZAČNI SKENIRANJE' }).click();
   await expect(page.getByRole('heading', { name: 'SKENIRAJ VSTOPNICO' })).toBeVisible();
@@ -68,6 +99,33 @@ test('camera permission failure stays distinct from ticket rejection and manual 
   await expect(page.getByRole('button', { name: 'PREVERI' })).toBeVisible();
 });
 
+test('manual fallback uses the same blocking result UI for every operational outcome', async ({ page }) => {
+  await page.addInitScript(() => Object.defineProperty(navigator, 'mediaDevices', { configurable: true, value: undefined }));
+  await login(page, /VARNOSTNIK/);
+  await openScanner(page);
+  await page.getByRole('button', { name: 'ROČNI VNOS KODE' }).click();
+  const input = page.getByPlaceholder('ndb_…'), credential = `ndb_${'A'.repeat(32)}`;
+  const states = [
+    ['accepted', 'VELJAVNA VSTOPNICA'],
+    ['already_used', 'ŽE UPORABLJENA'],
+    ['invalid', 'NEVELJAVNA VSTOPNICA'],
+    ['cancelled', 'VSTOPNICA PREKLICANA'],
+    ['wrong_event', 'NAPAČNA TEKMA'],
+  ] as const;
+  for (const [result, heading] of states) {
+    await page.route('**/api/scans', (route) => route.fulfill({ json: { result, ...(result === 'accepted' ? { ticket: { type: { section: 'Tribuna', name: 'Odrasli' }, admissions: [] } } : {}) } }), { times: 1 });
+    await input.fill(credential); await page.getByRole('button', { name: 'PREVERI' }).click();
+    await expect(page.getByRole('heading', { name: heading })).toBeVisible();
+    expect(await page.locator('#app').evaluate((element) => (element as HTMLElement).inert)).toBe(true);
+    await page.keyboard.press('Escape'); await expect(page.getByRole('alertdialog')).toBeVisible();
+    await page.getByRole('button', { name: 'POTRDI' }).click(); await expect(page.getByRole('alertdialog')).toBeHidden();
+  }
+  await page.route('**/api/scans', (route) => route.abort('failed'), { times: 1 });
+  await input.fill(credential); await page.getByRole('button', { name: 'PREVERI' }).click();
+  await expect(page.getByRole('heading', { name: 'TEŽAVA S POVEZAVO' })).toBeVisible();
+  await expect(page.locator('#scanner-result-description')).toContainText('Veljavnost ni bila preverjena');
+});
+
 test('a decoded camera frame sends one admission request while validation is in progress and tracks stop on exit', async ({ page }) => {
   const issued = await issueTicket(page);
   await page.addInitScript((credential) => {
@@ -81,7 +139,7 @@ test('a decoded camera frame sends one admission request while validation is in 
   let validations = 0;
   page.on('request', (request) => { if (request.url().endsWith('/api/scans')) validations += 1; });
   await openScanner(page);
-  await expect(page.getByRole('heading', { name: 'VSTOPNICA JE VELJAVNA' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'VELJAVNA VSTOPNICA' })).toBeVisible();
   const resultDialog = page.getByRole('alertdialog');
   await expect(resultDialog).toBeVisible();
   await expect(resultDialog).toHaveAttribute('aria-modal', 'true');
@@ -97,7 +155,7 @@ test('a decoded camera frame sends one admission request while validation is in 
   await expect(resultDialog).toBeHidden();
   await page.waitForTimeout(1_000);
   expect(validations).toBe(1);
-  await expect(page.getByRole('heading', { name: 'VSTOPNICA NI VELJAVNA' })).toBeVisible({ timeout: 6_000 });
+  await expect(page.getByRole('heading', { name: 'ŽE UPORABLJENA' })).toBeVisible({ timeout: 6_000 });
   expect(validations).toBe(2);
   await page.getByRole('button', { name: 'POTRDI' }).click();
   await page.getByRole('button', { name: 'SPREMENI VHOD' }).click();

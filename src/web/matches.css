@@ -1,0 +1,107 @@
+/* /admin/tekme only — Stitch administracija_tekme, backed by live event data. */
+body:has(.matches-page-refined){background:#060b14;color:#dae2fc}
+body:has(.matches-page-refined) .nav{min-height:64px;background:#10192c;border-bottom:1px solid #1d2d49}
+body:has(.matches-page-refined) .wrap{max-width:1181px;padding:34px 37px 64px}
+.matches-page-refined{display:grid;gap:36px}
+.matches-page-refined .matches-heading{margin:0}
+.matches-page-refined .matches-heading-kicker{display:flex;align-items:center;gap:9px;color:#94a3b8;font:700 10px Inter,system-ui,sans-serif;letter-spacing:.07em}
+.matches-page-refined .matches-heading-kicker span{padding:5px 9px;border-radius:999px;background:#172238;color:#fed400}
+.matches-page-refined .matches-heading-kicker i{width:7px;height:7px;border-radius:50%;background:#00e58c}
+.matches-page-refined .matches-heading-kicker b{font-weight:700}
+.matches-page-refined .matches-heading h1{margin:11px 0 5px;color:#fff;font:900 clamp(50px,5.4vw,64px)/.9 Impact,"Arial Narrow",sans-serif;letter-spacing:.025em}
+.matches-page-refined .matches-heading p{max-width:650px;margin:0;color:#aebbd0;font-size:13px;line-height:1.5}
+.matches-page-refined .matches-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:0}
+.matches-page-refined .matches-metric{display:flex;min-height:140px;flex-direction:column;padding:21px 15px;border:1px solid #1c2d49;border-radius:12px;background:#101b2f}
+.matches-page-refined .matches-metric span,.matches-page-refined .matches-metric small{display:block;color:#91a0b8;font:700 9px Inter,system-ui,sans-serif;letter-spacing:.055em}
+.matches-page-refined .matches-metric strong{display:block;margin:19px 0 10px;color:#fff;font:900 35px/.9 "Barlow Condensed","Arial Narrow",sans-serif}
+.matches-page-refined .matches-metric small{margin-top:auto}
+.matches-page-refined .matches-metric.yellow strong{color:#fed400}
+.matches-page-refined .matches-metric.green strong{color:#00e58c}
+.matches-page-refined .matches-filter{display:flex;align-items:center;gap:8px;min-height:50px;margin:0;padding:7px;border:1px solid #172742;border-radius:10px;background:#101b2f}
+.matches-page-refined .matches-filter button{min-height:36px;padding:8px 14px;border:0;border-radius:7px;background:transparent;color:#9daac0;font:800 13px Inter,system-ui,sans-serif;box-shadow:none}
+.matches-page-refined .matches-filter button:hover,.matches-page-refined .matches-filter button:focus-visible{background:#1a2942;color:#fff}
+.matches-page-refined .matches-filter button.active{background:#1269d3;color:#fff}
+.matches-page-refined .match-management-list{display:grid;gap:20px}
+.matches-page-refined .match-management-row{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 82px 135px 164px;gap:22px;align-items:center;min-height:194px;padding:22px 21px 22px 26px;overflow:hidden;border:1px solid #1c2d49;border-radius:11px;background:#101b2f}
+.matches-page-refined .match-management-row:before{content:"";position:absolute;inset:0 auto 0 0;width:5px;background:#64748b}
+.matches-page-refined .match-management-row.open:before,.matches-page-refined .match-management-row.sold-out:before{background:#fed400}
+.matches-page-refined .match-management-row.completed:before{background:#00e58c}
+.matches-page-refined .match-management-main{min-width:0}
+.matches-page-refined .match-management-tags{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
+.matches-page-refined .match-management-tags span{padding:4px 8px;border-radius:999px;background:#202d46;color:#bdc9da;font:800 9px Inter,system-ui,sans-serif;letter-spacing:.045em}
+.matches-page-refined .match-management-tags .sale-badge.open{background:#064b43;color:#00e58c}
+.matches-page-refined .match-management-tags .sale-badge.completed{background:#075043;color:#25f2a2}
+.matches-page-refined .match-management-tags .sale-badge.sold-out{background:#594716;color:#ffe05b}
+.matches-page-refined .match-management-tags .sale-badge.closed,.matches-page-refined .match-management-tags .sale-badge.pending{background:#27344b;color:#b7c3d6}
+.matches-page-refined .matches-fixture{display:flex;align-items:center;gap:10px;min-width:0}
+.matches-page-refined .matches-team-crest{width:39px;height:39px;flex:none;object-fit:contain}
+.matches-page-refined .matches-team-crest.away{width:36px;height:36px}
+.matches-page-refined .matches-matchup{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;min-width:0;margin:0;color:#fff;font:900 clamp(28px,3vw,38px)/.88 "Barlow Condensed","Arial Narrow",sans-serif;letter-spacing:.015em;text-transform:uppercase}
+.matches-page-refined .matches-matchup-first{display:flex;align-items:baseline;gap:.21em;white-space:nowrap}
+.matches-page-refined .matches-matchup-first b{font:inherit}
+.matches-page-refined .matches-matchup em{color:#fed400;font-style:normal}
+.matches-page-refined .matches-opponent{min-width:0;word-break:normal;overflow-wrap:normal;text-wrap:balance}
+.matches-page-refined .matches-event-meta{display:flex;gap:17px;flex-wrap:wrap;margin:14px 0 0;color:#aab8cb;font-size:11px}
+.matches-page-refined .match-management-occupancy{width:72px;height:72px;display:grid;place-content:center;flex:none;border:7px solid #293750;border-radius:50%;text-align:center}
+.matches-page-refined .match-management-occupancy.has-occupancy{border-top-color:#fed400;border-right-color:#fed400}
+.matches-page-refined .match-management-occupancy strong{color:#fff;font:900 21px/.9 "Barlow Condensed","Arial Narrow",sans-serif}
+.matches-page-refined .match-management-occupancy span,.matches-page-refined .match-management-stat span,.matches-page-refined .match-management-stat small{display:block;color:#8d9bb0;font:700 8px Inter,system-ui,sans-serif;letter-spacing:.045em}
+.matches-page-refined .match-management-stat strong{display:block;margin:8px 0;color:#fff;font:900 21px/.9 "Barlow Condensed","Arial Narrow",sans-serif}
+.matches-page-refined .match-management-stat small{color:#00e58c;line-height:1.35}
+.matches-page-refined .match-management-actions{display:grid;gap:7px}
+.matches-page-refined .match-management-actions a{display:block;text-decoration:none}
+.matches-page-refined .match-management-actions button{width:100%;min-height:44px;padding:8px 10px;font:900 14px "Barlow Condensed","Arial Narrow",sans-serif;letter-spacing:.04em}
+.matches-page-refined .match-management-actions .secondary{background:#1269d3;border-color:#1d7bf0;color:#fff}
+.matches-page-refined .match-management-actions .primary{background:#fed400;border-color:#e4ba00;color:#231b00}
+.matches-page-refined .matches-filter-empty{display:grid;place-items:center;min-height:190px;padding:32px;border:1px dashed #2a3a56;border-radius:11px;background:#101b2f;text-align:center}
+.matches-page-refined .matches-filter-empty strong{color:#fff;font:900 26px "Barlow Condensed","Arial Narrow",sans-serif}
+.matches-page-refined .matches-filter-empty span{color:#94a3b8;font-size:12px}
+.matches-page-state{min-height:470px;place-content:center;justify-items:start;padding:48px;border:1px solid #1c2d49;border-radius:13px;background:#101b2f}
+.matches-page-state>span{color:#fed400;font:800 10px Inter,system-ui,sans-serif;letter-spacing:.08em}
+.matches-page-state h1{margin:9px 0;color:#fff;font:900 48px/.92 "Barlow Condensed","Arial Narrow",sans-serif}
+.matches-page-state p{max-width:520px;margin:0 0 22px;color:#aebbd0;line-height:1.55}
+.matches-page-state a{text-decoration:none}
+.matches-page-state button{min-height:46px}
+@media(max-width:920px){
+  body:has(.matches-page-refined) .wrap{padding-inline:24px}
+  .matches-page-refined .matches-metrics{grid-template-columns:repeat(2,1fr)}
+  .matches-page-refined .match-management-row{grid-template-columns:minmax(0,1fr) 78px 125px}
+  .matches-page-refined .match-management-actions{grid-column:1/-1}
+  .matches-page-refined .match-management-actions button{min-height:48px}
+}
+@media(max-width:600px){
+  body:has(.matches-page-refined) .nav{display:flex;flex-wrap:wrap;gap:10px;padding:12px 18px}
+  body:has(.matches-page-refined) .nav .links{display:flex;order:2;flex:1 0 100%;gap:5px;overflow-x:auto;padding-bottom:1px;scrollbar-width:none}
+  body:has(.matches-page-refined) .nav .links::-webkit-scrollbar{display:none}
+  body:has(.matches-page-refined) .nav .links a{flex:none;padding:8px 10px;border-radius:7px;color:#b9c8dd;font-size:12px;font-weight:800;white-space:nowrap}
+  body:has(.matches-page-refined) .nav .links a.active{background:#1269d3;color:#fff}
+  body:has(.matches-page-refined) .switch-role{display:block;margin-left:auto;padding:8px 10px;background:#1c2a42;color:#fff;font-size:11px}
+  body:has(.matches-page-refined) .wrap{padding:24px 18px 52px}
+  .matches-page-refined{gap:24px}
+  .matches-page-refined .matches-heading-kicker b{display:none}
+  .matches-page-refined .matches-heading h1{font-size:43px}
+  .matches-page-refined .matches-heading p{font-size:12px}
+  .matches-page-refined .matches-metrics{grid-template-columns:1fr 1fr;gap:10px}
+  .matches-page-refined .matches-metric{min-height:132px;padding:16px 13px}
+  .matches-page-refined .matches-metric strong{margin:14px 0 8px;font-size:30px}
+  .matches-page-refined .matches-filter{gap:4px;overflow-x:auto;scrollbar-width:none}
+  .matches-page-refined .matches-filter button{flex:none;padding-inline:11px;font-size:11px}
+  .matches-page-refined .match-management-list{gap:14px}
+  .matches-page-refined .match-management-row{grid-template-columns:1fr 72px;gap:18px;min-height:0;padding:20px 17px 18px 21px}
+  .matches-page-refined .match-management-main{grid-column:1/-1}
+  .matches-page-refined .match-management-tags{margin-bottom:14px}
+  .matches-page-refined .matches-fixture{display:grid;grid-template-columns:34px minmax(0,1fr) 31px;gap:8px}
+  .matches-page-refined .matches-team-crest{width:34px;height:34px}
+  .matches-page-refined .matches-team-crest:first-child{grid-column:1;grid-row:1}
+  .matches-page-refined .matches-team-crest.away{grid-column:3;grid-row:1;width:31px;height:31px}
+  .matches-page-refined .matches-matchup{display:contents;font-size:clamp(28px,7.7vw,34px)}
+  .matches-page-refined .matches-matchup-first{grid-column:2;grid-row:1;align-self:center;font:900 clamp(28px,7.7vw,34px)/.88 "Barlow Condensed","Arial Narrow",sans-serif;text-transform:uppercase}
+  .matches-page-refined .matches-opponent{grid-column:1/-1;grid-row:2;font:900 clamp(24px,6.4vw,28px)/.92 "Barlow Condensed","Arial Narrow",sans-serif;text-transform:uppercase}
+  .matches-page-refined .matches-event-meta{display:grid;gap:7px;margin-top:13px;font-size:11px}
+  .matches-page-refined .match-management-occupancy{width:68px;height:68px}
+  .matches-page-refined .match-management-stat{align-self:center}
+  .matches-page-refined .match-management-actions{grid-column:1/-1}
+  .matches-page-refined .match-management-actions button{min-height:50px;font-size:16px}
+  .matches-page-state{min-height:390px;padding:32px 22px}
+  .matches-page-state h1{font-size:39px}
+}
