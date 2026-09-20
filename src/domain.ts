@@ -14,7 +14,7 @@ export interface Order { id: string; reference: string; accessToken: string; pay
 export interface Ticket { id: string; reference: string; credential: string; clubId: string; eventId: string; orderId: string; ticketTypeId: string; status: TicketStatus; issuedAt: string; admissions: Admission[] }
 export interface SeasonPass { id: string; reference: string; credential: string; clubId: string; seasonProductId: string; orderId: string; status: TicketStatus; issuedAt: string }
 export interface StaffUser { id: string; clubId: string; email: string; passwordHash: string; displayName: string; role: Role; active: boolean; createdAt: string; updatedAt: string; lastLoginAt?: string }
-export interface Admission { id: string; eventId: string; gate: string; scannedAt: string }
+export interface Admission { id: string; eventId: string; gate?: string; scannedAt: string }
 export interface Audit { id: string; clubId: string; type: string; at: string; detail: string }
 export interface Database { clubs: Array<{ id: string; name: string }>; staffUsers: StaffUser[]; events: Event[]; ticketTypes: TicketType[]; seasonProducts: SeasonProduct[]; orders: Order[]; tickets: Ticket[]; seasonPasses: SeasonPass[]; audits: Audit[] }
 
@@ -49,7 +49,7 @@ export function issueSeasonPasses(db: Database, order: Order): SeasonPass[] {
   }
   return result;
 }
-export function redeem(db: Database, clubId: string, eventId: string, gate: string, raw: string): { result: AdmissionResult; ticket?: Ticket } {
+export function redeem(db: Database, clubId: string, eventId: string, gate: string | undefined, raw: string): { result: AdmissionResult; ticket?: Ticket } {
   const ticket = db.tickets.find((candidate) => candidate.credential === raw && candidate.clubId === clubId);
   if (!ticket) return { result: 'invalid' };
   if (ticket.status === 'CANCELLED') return { result: 'cancelled', ticket };
